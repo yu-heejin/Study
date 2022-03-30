@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#CFCFCF"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/etDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:ems="10"
+        android:gravity="right"
+        android:inputType="textPersonName"
+        android:text=""
+        android:textSize="34sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_1"
+            android:layout_width="95dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="#CFCFCF"
+            android:onClick="onClick"
+            android:text="1"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/btn_2"
+            android:layout_width="95dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="#CFCFCF"
+            android:onClick="onClick"
+            android:text="2"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/btn_plus"
+            android:layout_width="95dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="#CFCFCF"
+            android:onClick="onClick"
+            android:text="+"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/btn_equal"
+            android:layout_width="95dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#CFCFCF"
+            android:onClick="onClick"
+            android:text="="
+            android:textColor="#000000" />
+    </LinearLayout>
+
+</LinearLayout>
