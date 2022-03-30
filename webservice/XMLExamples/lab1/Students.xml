@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- xml 선언부 자동 생성 -->
+<studentList>
+	<student sid="20200111" year="3">
+		<name>마리</name>
+		<department name="컴퓨터학과"/>
+	</student>
+</studentList>
