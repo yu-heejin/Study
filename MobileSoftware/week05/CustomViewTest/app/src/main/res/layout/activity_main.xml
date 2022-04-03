@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:backgroundTint="#CACACA"
+        android:onClick="onClick"
+        android:text="circle draw"
+        android:textColor="#000000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ddwucom.moblie.week05.customviewtest.MyView
+            android:id="@+id/myview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ddwucom.moblie.week05.customviewtest.MyView>
+
+    </LinearLayout>
+</LinearLayout>
