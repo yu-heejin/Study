@@ -33,6 +33,24 @@ public class MainActivity extends AppCompatActivity {
         myView2.invalidate();
     }
 
+    class MyInnerView extends View {
+        public MyInnerView(Context context) {
+            super(context);
+        }
+
+        public MyInnerView(Context context, @Nullable AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public MyInnerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        public MyInnerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+            super(context, attrs, defStyleAttr, defStyleRes);
+        }
+    }
+
 //
 //    class MyInnerView extends View {  //View클래스를 상속받은 customView (클래스 안 내부 클래스)
 //        public int color;

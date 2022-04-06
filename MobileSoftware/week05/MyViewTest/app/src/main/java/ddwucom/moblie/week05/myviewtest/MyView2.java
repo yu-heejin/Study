@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -47,5 +48,11 @@ public class MyView2 extends View {  //xml에 추가하고 싶다면 모든 생�
         //pnt.setColor(Color.RED);
         pnt.setColor(color);
         canvas.drawCircle(100, 100, 80, pnt);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return super.onTouchEvent(event);
     }
 }
