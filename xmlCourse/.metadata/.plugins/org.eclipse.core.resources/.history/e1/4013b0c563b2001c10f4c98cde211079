@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookCatalog SYSTEM "BookML.dtd" >
+<bookCatalog>
+  <bookList>
+    <book categories="idvalue0" id="idvalue0">
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <category cid="idvalue1" name=""/>
+    </book>
+    <eBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <category cid="idvalue2" name=""/>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+      <period>period</period>
+    </eBook>
+    <newEBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <category cid="idvalue3" name=""/>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+      <period>period</period>
+    </newEBook>
+  </bookList>
+  <bookCategory>
+    <category cid="idvalue4" name=""/>
+  </bookCategory>
+</bookCatalog>

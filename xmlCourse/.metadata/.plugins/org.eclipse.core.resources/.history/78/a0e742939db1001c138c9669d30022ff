@@ -1,0 +1,5 @@
+<!ELEMENT bookCatalog (bookList, bookCategory)>
+<!ELEMENT bookList (book*)>
+<!ELEMENT bookCategory EMPTY>
+<!ELEMENT book (title, author+, publisher, publishDate)>
+<!ELEMENT title (#PCDATA)>

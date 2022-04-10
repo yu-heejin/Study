@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.example.org/bookTypes" 
+	xmlns:tns="http://www.example.org/bookTypes" 
+	elementFormDefault="qualified">
+	
+	<simpleType name="discountRateType">
+		<restriction base="int">
+			<minExclusive value="0"></minExclusive>
+			<maxExclusive value="80"></maxExclusive>
+		</restriction>
+	</simpleType>
+	
+
+	<simpleType name="currencyType">
+		<restriction base="string">
+			<enumeration value="won"></enumeration>
+			<enumeration value="dollor"></enumeration>
+			<enumeration value="yen"></enumeration>
+		</restriction>
+	</simpleType>
+</schema>

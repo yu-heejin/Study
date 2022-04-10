@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookCatalog SYSTEM "BookML.dtd" >
+<bookCatalog>
+  <bookList>
+    <book categories="idvalue0" id="idvalue0">
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+    </book>
+    <eBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </eBook>
+    <newEBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </newEBook>
+  </bookList>
+  <bookCategory>
+    <category cid="idvalue1" name=""/>
+  </bookCategory>
+</bookCatalog>

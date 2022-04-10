@@ -1,0 +1,54 @@
+<!ENTITY % dateAttrs "year CDATA #REQUIRED
+					month CDATA #REQUIRED
+					day CDATA #REQUIRED">  <!-- 내부 파라미터 entity -->
+<!ENTITY % commonBookInfo "title, originalTitle?, author+, translator?, publisher, publishDate, revisionDate*, price, discountRate, pages, coverImage?, description?, review*"> <!-- 내부 파라미터 entity -->
+<!-- R2 : 각 도서는 제목, 저자, 출판사, 출판일, 가격, 할인율, 페이지수, 분야에 대한 정보를 갖고, 추가적으로 개정
+<!ENTITY % newBookInfo "title, originalTitle?, author+, translator?, publisher, publishDate, price, discountRate, pages, coverImage?, description?, review*"> <!-- 내부 파라미터 entity -->
+<!ENTITY publisherName "문학동네"> <!-- 내부 일반 parsed entity -->
+<!ENTITY discount "10">   <!-- 내부 일반 parsed entity -->
+<!NOTATION jpeg PUBLIC "image/jpeg" "imageViewer.exe">
+<!NOTATION gif PUBLIC "image/gif" "imageViewer.exe">
+					
+
+<!ELEMENT bookCatalog (bookList, bookCategory)>  <!-- R1 : BookML 문서는 도서들의 목록과 도서 분류 체계로 구성된다 -->
+<!ELEMENT bookList (book*, eBook*, newEBook*)>
+<!ELEMENT book (%commonBookInfo;)>
+<!ELEMENT eBook (%commonBookInfo;, format, size, period?)>
+<!ELEMENT newEBook (%newBookInfo;, format, size, period?)>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT originalTitle (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT translator (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT publishDate EMPTY>
+<!ELEMENT revisionDate EMPTY>
+<!ELEMENT price (listPrice, discountPrice)>
+<!ELEMENT listPrice (#PCDATA)>
+<!ELEMENT discountPrice (#PCDATA)>
+<!ELEMENT discountRate (#PCDATA)>
+<!ELEMENT pages (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT review (#PCDATA)>
+<!ELEMENT coverImage (#PCDATA)>
+<!ELEMENT format EMPTY>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT period (#PCDATA)>
+
+<!ATTLIST book id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST eBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST newEBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST publishDate %dateAttrs;>
+<!ATTLIST revisionDate %dateAttrs;>
+<!ATTLIST price currency (won|dollar|yen) "won">
+<!ATTLIST coverImage src CDATA #REQUIRED type NOTATION (jpeg|gif) #REQUIRED>
+<!ATTLIST format value (EPUB|PDF|StreamText|StreamImage) #REQUIRED>
+<!ATTLIST size unit (B|KB|MB|GB|TB) #REQUIRED>
+
+<!ELEMENT bookCategory (category*)>
+<!ELEMENT category (category*)>
+<!ATTLIST category cid ID #REQUIRED
+				name CDATA #REQUIRED>

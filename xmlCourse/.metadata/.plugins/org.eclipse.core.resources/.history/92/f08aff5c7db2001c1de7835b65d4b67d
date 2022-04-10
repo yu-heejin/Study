@@ -1,0 +1,51 @@
+<!ENTITY % dateAttrs "year CDATA #REQUIRED
+					month CDATA #REQUIRED
+					day CDATA #REQUIRED">
+<!ENTITY % commonBookInfo "title, originalTitle?, author+, translator?, publisher, publishDate, revisionDate*, price, discountRate, pages, coverImage?, description?, review*">
+<!ENTITY % newBookInfo "title, author+, publisher, publishDate, price, discountRate, pages, coverImage?, description?, review*, originalTitle?, translator?">
+<!NOTATION jpeg PUBLIC "image/jpeg" "imageViewer.exe">
+<!NOTATION gif PUBLIC "image/gif" "imageViewer.exe">
+					
+
+<!ELEMENT bookCatalog (bookList, bookCategory)>
+<!ELEMENT bookList (book*, eBook*, newEBook*)>
+<!ELEMENT book (%commonBookInfo;)>
+<!ELEMENT eBook (%commonBookInfo;, format, size, period?)>
+<!ELEMENT newEBook (%newBookInfo;, format, size, period?)>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT originalTitle (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT translator (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT publishDate EMPTY>
+<!ELEMENT revisionDate EMPTY>
+<!ELEMENT price (listPrice, discountPrice)>
+<!ELEMENT listPrice (#PCDATA)>
+<!ELEMENT discountPrice (#PCDATA)>
+<!ELEMENT discountRate (#PCDATA)>
+<!ELEMENT pages (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT review (#PCDATA)>
+<!ELEMENT coverImage (#PCDATA)>
+<!ELEMENT format EMPTY>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT period (#PCDATA)>
+
+<!ATTLIST book id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST eBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST newEBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST publishDate %dateAttrs;>
+<!ATTLIST revisionDate %dateAttrs;>
+<!ATTLIST price currency (won|dollar|yen) "won">
+<!ATTLIST coverImage src CDATA #REQUIRED type NOTATION (jpeg|gif) #REQUIRED>
+<!ATTLIST format value (EPUB|PDF|StreamText|StreamImage) #REQUIRED>
+<!ATTLIST size unit (B|KB|MB|GB|TB) #REQUIRED>
+
+<!ELEMENT bookCategory (category*)>
+<!ELEMENT category (category*)>
+<!ATTLIST category cid ID #REQUIRED
+				name CDATA #REQUIRED>

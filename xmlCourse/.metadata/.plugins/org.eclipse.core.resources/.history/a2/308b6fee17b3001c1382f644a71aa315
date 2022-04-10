@@ -1,0 +1,64 @@
+<!ENTITY % dateAttrs "year CDATA #REQUIRED
+					month CDATA #REQUIRED
+					day CDATA #REQUIRED">  <!-- 내부 파라미터 entity -->
+<!ENTITY % commonBookInfo "title, originalTitle?, author+, translator?, publisher, publishDate, revisionDate*, price, discountRate, pages, category+, coverImage?, description?, review*"> <!-- 내부 파라미터 entity -->
+<!-- R2 : 각 도서는 제목, 저자, 출판사, 출판일, 가격, 할인율, 페이지수, 분야에 대한 정보를 갖고, 추가적으로 개정일, 표지그림, 책소개, 독자리뷰 등을 가질 수 있다.
+번역서인 경우 원서 제목과 역자 정보도 있다. 저자와 분야, 개정일, 독자리뷰는 여러 개가 존재할 수 있다. -->
+<!ENTITY % newBookInfo "title, originalTitle?, author+, translator?, publisher, publishDate, price, discountRate, pages, category+, coverImage?, description?, review*"> <!-- 내부 파라미터 entity -->
+<!ENTITY publisherName "문학동네"> <!-- 내부 일반 parsed entity -->
+<!ENTITY discount "10">   <!-- 내부 일반 parsed entity -->
+<!NOTATION jpeg PUBLIC "image/jpeg" "imageViewer.exe">
+<!NOTATION gif PUBLIC "image/gif" "imageViewer.exe">
+<!NOTATION png PUBLIC "image/png" "imageViewer.exe">
+<!-- R8 : 도서의 표지그림은 외부의 이미지 파일을 지정해야하며, 파일의 포맷(JPEG, GIF, PNG 등)과 이를 출력할 수 있는
+      응용 프로그램을 나타내야 한다. -->
+					
+<!ELEMENT bookCatalog (bookList, bookCategory)>  <!-- R1 : BookML 문서는 도서들의 목록과 도서 분류 체계로 구성된다 -->
+<!ELEMENT bookList (book*, eBook*, newEBook*)>
+<!ELEMENT book (%commonBookInfo;)>
+<!ELEMENT eBook (%commonBookInfo;, format, size, period?)>
+<!ELEMENT newEBook (%newBookInfo;, format, size, period?)>
+ <!-- R9 : 다운로드 받을 수 있는 전자책(eBook) 도서는 위 R2에 나열된 정보들뿐만 아니라
+      파일 형식과 파일 크기, 이용기간 정보가 추가된다. 이용기간은 제한이 없을 경우 생략 가능하다. -->
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT originalTitle (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT translator (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT publishDate EMPTY>
+<!ELEMENT revisionDate EMPTY>
+<!ELEMENT price (listPrice, discountPrice)>
+<!ELEMENT listPrice (#PCDATA)>
+<!ELEMENT discountPrice (#PCDATA)>
+<!-- R5 : 가격은 정가와 할인가로 구분되고 양수값을 갖는다. 가격은 원, 달러, 엔으로 표시된다. 원화인 경우 생략 가능하다. -->
+<!ELEMENT discountRate (#PCDATA)> <!-- R6 : 할인율은 0~80의 값을 갖고 -->
+<!ELEMENT pages (#PCDATA)> <!-- R6 : 페이지수는 1이상 1000이하의 값을 갖는다. -->
+<!ELEMENT category (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT review (#PCDATA)>
+<!ELEMENT coverImage (#PCDATA)>
+<!ELEMENT format EMPTY>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT period (#PCDATA)>
+
+<!ATTLIST book id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST eBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!ATTLIST newEBook id ID #REQUIRED
+				categories IDREFS #IMPLIED>
+<!-- R7 : 도서가 속한 분야들은 반드시 별도로 정의된 도서 분류 체계에 있는 특정 분야들에 대응되어야 한다. -->
+<!ATTLIST publishDate %dateAttrs;>
+<!ATTLIST revisionDate %dateAttrs;>
+<!ATTLIST price currency (won|dollar|yen) "won">
+<!ATTLIST coverImage src CDATA #REQUIRED type NOTATION (jpeg|gif|png) #REQUIRED>
+<!ATTLIST format value (EPUB|PDF|StreamText|StreamImage) #REQUIRED>
+<!-- R10 : 전자책의 파일형식은 EPUB, PDF, StreamText, StreamImage 중 하나의 값을 갖는다.
+파일 크기는 실수 값이고 단위가 있다. 이용기간은 날짜 수로 정의된다 -->
+<!ATTLIST size unit (B|KB|MB|GB|TB) #REQUIRED>
+
+<!ELEMENT bookCategory (category*)>
+<!ELEMENT category (category*)>
+<!ATTLIST category cid ID #REQUIRED
+				name CDATA #REQUIRED>

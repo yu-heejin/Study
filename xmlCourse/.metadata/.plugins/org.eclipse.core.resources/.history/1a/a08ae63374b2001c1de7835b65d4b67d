@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookCatalog SYSTEM "BookML.dtd" >
+<bookCatalog>
+  <bookList>
+    <book categories="c101-1-1" id="isbn-895467277-9">
+      <title>일곱해의 마지막</title>
+      <author>김연수</author>
+      <publisher>문학동네</publisher>
+      <publishDate year="2020" month="07" day="01"/>
+      <revisionDate year="2021" month="02" day="15"/>
+      <price currency="won">
+        <listPrice>13500</listPrice>
+        <discountPrice>12150</discountPrice>
+      </price>
+      <discountRate>10</discountRate>
+      <pages>248</pages>
+      <coverImage type="jpeg" src="http://image.yes24.com/goods/90619474/L"></coverImage>
+      <description>개인이 밟아나간 작품 활동의 궤적을 곧 한국소설의 중요한 흐름 가운데 하나로 만들어내며
+      한국문학의 판도를 뒤바꾼 작가 김연수의 신작 장편소설. 삼십 년 가까이 작가생활을 하는 동안
+      김연수는 에너지와 불안으로 가득한 청춘의 눈빛을 가장 가까이에서 기록하는 한편으로 사랑의 본질에
+      대해 끊임없이 탐구하며 그만의 지적인 사랑학 개론을 펼쳐왔다. 그리고 그와 동시에 방대한 역사적 자료를 바탕으로
+      객관적인 사실로는 가닿을 수 없는 빈틈에서 개인의 진실을 발견해내는 작업을 해오기도 했다.</description>
+    </book>
+    <eBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </eBook>
+    <newEBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </newEBook>
+  </bookList>
+  <bookCategory>
+    <category cid="idvalue1" name=""/>
+  </bookCategory>
+</bookCatalog>

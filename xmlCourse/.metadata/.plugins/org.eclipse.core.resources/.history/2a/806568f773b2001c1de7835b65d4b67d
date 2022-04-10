@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookCatalog SYSTEM "BookML.dtd" >
+<bookCatalog>
+  <bookList>
+    <book categories="c101-1-1" id="isbn-895467277-9">
+      <title>일곱해의 마지막</title>
+      <author>김연수</author>
+      <publisher>문학동네</publisher>
+      <publishDate year="2020" month="07" day="01"/>
+      <revisionDate year="2021" month="02" day="15"/>
+      <price currency="won">
+        <listPrice>13500</listPrice>
+        <discountPrice>12150</discountPrice>
+      </price>
+      <discountRate>10</discountRate>
+      <pages>248</pages>
+      <coverImage type="jpeg" src="http://image.yes24.com/goods/90619474/L"></coverImage>
+    </book>
+    <eBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </eBook>
+    <newEBook>
+      <title>title</title>
+      <author>author</author>
+      <publisher>publisher</publisher>
+      <publishDate day="" month="" year=""/>
+      <price currency="won">
+        <listPrice>listPrice</listPrice>
+        <discountPrice>discountPrice</discountPrice>
+      </price>
+      <discountRate>discountRate</discountRate>
+      <pages>pages</pages>
+      <format value="EPUB"/>
+      <size unit="B">size</size>
+    </newEBook>
+  </bookList>
+  <bookCategory>
+    <category cid="idvalue1" name=""/>
+  </bookCategory>
+</bookCatalog>

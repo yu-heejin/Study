@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bookCatalog SYSTEM "BookML.dtd" >
+<bookCatalog>
+  <bookList>
+    <book categories="c101-1-1" id="isbn-895467277-9">
+      <title>&lt;일곱해의 마지막&gt;</title> <!-- 빌트 인(built in) entity -->
+      <author>김연수</author>
+      <publisher>&publisherName;</publisher>
+      <publishDate year="2020" month="07" day="01"/>
+      <revisionDate year="2021" month="02" day="15"/>
+      <price currency="won">
+        <listPrice>13500</listPrice>
+        <discountPrice>12150</discountPrice>
+      </price>
+      <discountRate>10</discountRate>
+      <pages>248</pages>
+      <coverImage type="jpeg" src="http://image.yes24.com/goods/90619474/L"></coverImage>
+      <description>개인이 밟아나간 작품 활동의 궤적을 곧 한국소설의 중요한 흐름 가운데 하나로 만들어내며
+      한국문학의 판도를 뒤바꾼 작가 김연수의 신작 장편소설. 삼십 년 가까이 작가생활을 하는 동안
+      김연수는 에너지와 불안으로 가득한 청춘의 눈빛을 가장 가까이에서 기록하는 한편으로 사랑의 본질에
+      대해 끊임없이 탐구하며 그만의 지적인 사랑학 개론을 펼쳐왔다. 그리고 그와 동시에 방대한 역사적 자료를 바탕으로
+      객관적인 사실로는 가닿을 수 없는 빈틈에서 개인의 진실을 발견해내는 작업을 해오기도 했다.</description>
+      <review>김연수 작가님의 오랜만의 신작이라 구매했어요. 일제강점기 이후 해방과 전쟁, 분단 등
+      혼란한 시기 북으로 간 시인 백석의 이야기입니다. 전쟁이 끝난 7년 동안의 백석의 이야기. 작가님도 8년만의 신작인데 그 시간동안 백석의 시간을
+      곱씹어 보셨을까요. 책에 대한 정보 하나도 없이 작가님 이름만 보고 구입했는데 제목이 직관적이었네요. 마음이 많이 무거워지고 여운도 많이 남는 글이었습니다.</review>
+      <review>...</review>
+    </book>
+    <eBook id="isbn-978-893497246-4" categories="c102-1 c103-2">
+      <title>&lt;사피엔스&gt;</title>  <!-- 빌트 인(built in) entity -->
+      <originalTitle>Sapiens: A Brief History of Humankid</originalTitle>
+      <author>유발 하라리</author>
+      <translator>조현욱</translator>
+      <publisher>김영사</publisher>
+      <publishDate year="2015" month="11" day="23"/>
+      <price currency="won">
+        <listPrice>19800</listPrice>
+        <discountPrice>18300</discountPrice>
+      </price>
+      <discountRate>&discount;</discountRate>
+      <pages>636</pages>
+      <description>변방의 유인원 호모 사피엔스는 어떻게 세상의 지배자가 되었는가?
+      수렵채집을 하던 우리 조상들을 어떻게 한 곳에 모여 도시와 왕국을 건설하였는가? 인간은 왜 지구 역사상 가장 치명적인
+      동물이 되었는가? 과학은 모든 종교의 미래인가? 인간의 유효기간은 언제까지인가? 멀고먼
+      인류의 시원부터 인지혁명, 농협혁명, 과학혁명을 거쳐 끊임없이 진화해온 인간의 역사를 생물학, 경제학, 종교학,
+      심리학, 철학 등 여러 학문의 경계를 넘나들며 다양하고 생생하게 조명한 전인미답의 문제작. 
+      호모 사피엔스부터 인공지능까지, 기나긴 역사의 시간을 한 권으로 써내려간 문명 항해기. 이제 우리는 무엇을 인간이라고 할 것인가.</description>
+      <format value="EPUB"/>
+      <size unit="MB">26.60</size>
+      <period>30</period>
+    </eBook>
+    <newEBook id="isbn-978-893102200-1" categories="c102-1">
+      <title>&quot;인간 불평등 기원론&quot;</title>  <!-- 빌트 인(built in) entity -->
+      <originalTitle>Discourse on the Origin and Basis of Inequality Among Men</originalTitle>
+      <author>장 자크 루소</author>
+      <translator>이재형</translator>
+      <publisher>Bookmakers</publisher>
+      <publishDate year="2021" month="1" day="25"/>
+      <!--  <revisionDate year="2021" month="3" day="15" /> -->
+      <price currency="won">
+        <listPrice>1500</listPrice>
+        <discountPrice>1350</discountPrice>
+      </price>
+      <discountRate>&discount;</discountRate>
+      <pages>910</pages>
+      <format value="EPUB"/>
+      <size unit="MB">1.28</size>
+      <period>10</period>
+    </newEBook>
+  </bookList>
+  <bookCategory>
+    <category cid="c101" name="문학">
+    	<category cid="c101-1" name="소설">
+    		<category cid="c101-1-1" name="한국소설"></category>
+    		<category cid="c101-1-2" name="영미소설"></category>
+    	</category>
+    	<category cid="c101-2" name="시"></category>
+    	<category cid="c101-3" name="희곡"></category>
+    </category>
+    <category cid="c102" name="인문">
+    	<category cid="c102-1" name="철학/사상"></category>
+    	<category cid="c102-2" name="심리학"></category>
+    </category>
+    <category cid="c103" name="역사">
+    	<category cid="c103-1" name="한국사"></category>
+    	<category cid="c103-2" name="세계사"></category>
+    </category>
+  </bookCategory>
+</bookCatalog>

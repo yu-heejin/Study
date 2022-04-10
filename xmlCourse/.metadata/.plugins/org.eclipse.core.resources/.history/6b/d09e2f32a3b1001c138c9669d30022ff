@@ -1,0 +1,20 @@
+<!ENTITY % dateAttrs "year CDATA #REQUIRED
+					month CDATA #REQUIRED
+					day CDATA #REQUIRED">
+
+<!ELEMENT bookCatalog (bookList, bookCategory)>
+<!ELEMENT bookList (book*)>
+<!ELEMENT book (title, author+, publisher, publishDate, revisionDate*, price)>
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT publishDate EMPTY>
+<!ELEMENT revisionDate EMPTY>
+<!ELEMENT price (#PCDATA)>
+
+<!ATTLIST book id ID #REQUIRED>
+<!ATTLIST publishDate %dateAttrs;>
+<!ATTLIST revisionDate %dateAttrs;>
+
+<!ELEMENT bookCategory EMPTY>
