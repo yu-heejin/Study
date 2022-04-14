@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity {
         //Activity가 가진 메소드에 등록시킴
         registerForContextMenu(textView);
 
-        checkedItem = new boolean[2];
+        //checkedItem = new boolean[2];
+        //배열은 초기화 시켜주는 것이 좋다
+        checkedItem = new boolean[] {false, false};
     }
 
     @Override
