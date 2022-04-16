@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+ targetNamespace="http://www.example.org/bookML"   
+ xmlns:tns="http://www.example.org/bookTypes"
+ elementFormDefault="qualified">
+ 
+ <simpleType name="isbnType">
+  <restriction base="string">
+   <pattern value="\d{9}-\d"/>     <!-- 수정 필요(숫자9자리, 숫자1자리) -->
+  </restriction>
+ </simpleType>
+
+ <simpleType name="currencyType">
+  <restriction base="string">
+   <enumeration value="won"/>
+   <enumeration value="dollar"/>
+   <enumeration value="yen"/>
+  </restriction>
+  </simpleType>
+ 
+
+ <simpleType name="pagesType">
+  <restriction base="integer">
+   <minInclusive value="1"/>
+   <maxInclusive value="1000"/>
+  </restriction>
+ </simpleType>
+ 
+ <complexType name="fileSizeType">
+  <simpleContent>
+   <extension base="decimal">
+    <attribute name="unit" type="string" />
+   </extension>
+  </simpleContent>
+ </complexType>
+ 
+
+</schema>

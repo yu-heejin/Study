@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+targetNamespace="http://www.example.org/bookTypes" 
+xmlns:tns="http://www.example.org/bookTypes" 
+elementFormDefault="qualified">
+
+<simpleType name="isbnType">    <!-- 도서의 ID -->
+  <restriction base="string">
+   <pattern value="\d{9}-\d"/>     <!-- 수정 필요(숫자9자리, 숫자1자리) -->
+  </restriction>
+</simpleType>
+
+<!-- R5 : 가격은 원, 달러, 엔으로 표시된다. -->
+<simpleType name="currencyType">   <!-- 통화 -->
+  <restriction base="string">
+   <enumeration value="won"/>
+   <enumeration value="dollar"/>
+   <enumeration value="yen"/>
+  </restriction>
+</simpleType>
+
+<!-- R6 : 페이지 수는 1 이상 1000이하의 값을 갖는다 -->
+<simpleType name="pagesType">    <!-- 페이지수 -->
+  <restriction base="positiveInteger">
+   <minInclusive value="1"/>
+   <maxInclusive value="1000"/>
+  </restriction>
+</simpleType>
+ 
+<!-- R4 : 도서의 출판일과 개정일은 연, 월, 일로 구성된다.
+연도는 1900~2021 사이의 값을 갖고, 월과 일은 각각 01~12, 01~31 사이의 값을 갖는다. -->
+ <simpleType name="yearType">   <!-- 연, 월, 일에 대한 속성 그룹 정의 -->
+ 	<restriction base="int">
+ 		<minInclusive value="1900"></minInclusive>
+ 		<maxInclusive value="2021"></maxInclusive>
+ 	</restriction>
+ </simpleType>
+ 
+ <simpleType name="monthType">
+ 	<restriction base="int">
+ 		<minInclusive value="1"></minInclusive>
+ 		<maxExclusive value="12"></maxExclusive>
+ 	</restriction>
+ </simpleType>
+ 
+ <simpleType name="dayType">
+ 	<restriction base="int">
+ 		<minInclusive value="1"></minInclusive>
+ 		<maxInclusive value="31"></maxInclusive>
+ 	</restriction>
+ </simpleType>
+ 
+ <!-- R5 : 가격은 정가와 할인가로 구분되고 양수값을 갖는다. -->
+ <complexType name="priceType">  <!-- 가격 -->
+ 	<sequence>
+ 		<element name="listPrice" type="positiveInteger"></element>
+ 		<element name="discountPrice" type="positiveInteger"></element>
+ 	</sequence>
+ </complexType>
+ 
+ <!-- R10 : 전자책의 파일 형식은 EPUB, PDF, StreamText, StreamImage 중 하나의 값을 갖는다. -->
+ <simpleType name="formatType">  <!-- 파일 형식 -->
+	<restriction base="string">
+   		<enumeration value="EPUB"/>
+   		<enumeration value="PDF"/>
+   		<enumeration value="StreamText"/>
+   		<enumeration value="StreamImage"/>
+  	</restriction>
+</simpleType>
+
+<complexType name="fileSizeType">  <!-- 파일 크기 -->
+  <simpleContent>
+   <extension base="decimal">
+    <attribute name="unit" type="string" />
+   </extension>
+  </simpleContent>
+ </complexType>
+
+<!-- R11 : 새로 나온 신간 전자책은 할인율이 10% 이하이며, -->
+<simpleType name="discountType">   <!-- 할인율 -->
+ 	<restriction base="int">
+ 		<minInclusive value="0"></minInclusive>
+ 		<maxInclusive value="10"></maxInclusive>
+ 	</restriction>
+</simpleType>
+
+<!-- R10 : 이용기간은 날짜 수로 정의된다 -->
+<!-- R11 : 새로나온 신간 전자책은 이용기간이 최대 2주일이고 -->
+<simpleType name="periodType">
+ 	<restriction base="positiveInteger">
+ 		<minInclusive value="1"></minInclusive>
+ 		<maxInclusive value="14"></maxInclusive>
+ 	</restriction>
+</simpleType>
+
+</schema>
