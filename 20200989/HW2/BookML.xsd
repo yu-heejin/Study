@@ -2,8 +2,11 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema" 
 targetNamespace="http://www.example.org/BookML" 
 xmlns:tns="http://www.example.org/BookML" 
-elementFormDefault="qualified" >
-<include schemaLocation="bookTypes.xsd"></include>    <!-- 미리 지정한 simpleType을 사용하기 위해 include -->
+elementFormDefault="qualified" 
+xmlns:Q1="http://www.example.org/bookTypes">
+
+    <import schemaLocation="bookTypes.xsd" namespace="http://www.example.org/bookTypes"></import>
+    <!-- include schemaLocation="./bookTypes.xsd"/ 오류로 인해 동작하지 않음 -->
 
 <!-- xmlns="http://www.w3.org/2001/XMLSchema"    xml스키마 파일 자체의 default namespace 선언 (xsd: 접두사 사용)
 	targetNamespace="http://www.example.org/bookML"    파일 이름을 namespace로 사용
@@ -14,14 +17,16 @@ elementFormDefault="qualified" >
 	elementFormDefault="qualified" : 요소의 이름을 qName 형태로 사용
 -->
 
+<!-- R4 : 도서의 출판일과 개정일은 연, 월, 일로 구성된다.
+연도는 1900~2021 사이의 값을 갖고, 월과 일은 각각 01~12, 01~31 사이의 값을 갖는다. -->
 <element name="publishDate">   <!-- 빈도수는 전역 엘리먼트에서 나올 수 없음 + 자식엘리먼트를 가지는 경우 타입 선언X -->
 	<complexType>
-		<attributeGroup ref="tns:dateAttrs"></attributeGroup>
+		<attributeGroup ref="Q1:dateAttrs"></attributeGroup>
 	</complexType>
 </element>
 <element name="revisionDate">
 	<complexType>
-		<attributeGroup ref="tns:dateAttrs"></attributeGroup>
+		<attributeGroup ref="Q1:dateAttrs"></attributeGroup>
 	</complexType>
 </element>
 
@@ -37,15 +42,15 @@ elementFormDefault="qualified" >
  		<element name="publisher" type="string"></element>
  		<element ref="tns:publishDate"></element>
  		<element ref="tns:revisionDate" minOccurs="0" maxOccurs="unbounded"></element>
- 		<element name="price" type="tns:priceType"></element>
- 		<element name="discountRate" type="tns:discountType" minOccurs="0" maxOccurs="1"></element>
- 		<element name="pages" type="tns:pagesType"></element>
+ 		<element name="price" type="Q1:priceType"></element>
+ 		<element name="discountRate" type="Q1:discountType" minOccurs="0" maxOccurs="1"></element>
+ 		<element name="pages" type="Q1:pagesType"></element>
  		<element name="category" type="string" minOccurs="1" maxOccurs="unbounded"></element>
- 		<element name="coverImage" type="tns:imageType" minOccurs="0" maxOccurs="1"></element>
+ 		<element name="coverImage" type="Q1:imageType" minOccurs="0" maxOccurs="1"></element>
  		<element name="description" type="string" minOccurs="0" maxOccurs="1"></element>
  		<element name="review" type="string" minOccurs="0" maxOccurs="unbounded"></element>
  	</sequence> 
- 	<attribute name="isbn" type="tns:isbnType"></attribute> <!-- 해당 타입을 가지는 엘리먼트가 가지는 속성 -->
+ 	<attribute name="isbn" type="Q1:isbnType"></attribute> <!-- 해당 타입을 가지는 엘리먼트가 가지는 속성 -->
  </complexType>
  
  <!-- R9 : 다운로드 받을 수 있는 전자책 도서는 위 R2에 나열된 정보들 뿐만 아니라 파일 형식과 파일 크기,
@@ -55,8 +60,8 @@ elementFormDefault="qualified" >
  	<complexContent>
  		<extension base="tns:bookType">
  			<sequence>
- 				<element name="format" type="tns:formatType"></element>
- 				<element name="size" type="tns:fileSizeType"></element>
+ 				<element name="format" type="Q1:formatType"></element>
+ 				<element name="size" type="Q1:fileSizeType"></element>
  				<element name="period" type="positiveInteger" minOccurs="0" maxOccurs="1"></element>
  			</sequence>
  		</extension>
@@ -75,34 +80,34 @@ elementFormDefault="qualified" >
  				<element ref="tns:publishDate"></element>
  				<!-- R11 : 개정일은 존재할 수 없다 -->
  				<element ref="tns:revisionDate" minOccurs="0" maxOccurs="0"></element>
- 				<element name="price" type="tns:priceType"></element>
- 				<element name="discountRate" type="tns:discountType" minOccurs="0" maxOccurs="1">
+ 				<element name="price" type="Q1:priceType"></element>
  				<!-- R11 : 새로나온 신간 전자책은 할인율이 10% 이하이며,-->
+ 				<element name="discountRate" minOccurs="0" maxOccurs="1">
  					<simpleType>
- 						<restriction base="tns:discountType">
+ 						<restriction base="Q1:discountType">
  							<minInclusive value="0"></minInclusive>
  							<maxInclusive value="10"></maxInclusive>
  						</restriction>
  					</simpleType>
  				</element>
- 				<element name="pages" type="int"></element>
+ 				<element name="pages" type="Q1:pagesType"></element>
  				<element name="category" type="string" minOccurs="1" maxOccurs="unbounded"></element>
- 				<element name="coverImage" type="tns:imageType" minOccurs="0" maxOccurs="1"></element>
+ 				<element name="coverImage" type="Q1:imageType" minOccurs="0" maxOccurs="1"></element>
  				<element name="description" type="string" minOccurs="0" maxOccurs="1"></element>
  				<element name="review" type="string" minOccurs="0" maxOccurs="unbounded"></element>
- 				<element name="format" type="tns:formatType"></element>
- 				<element name="size" type="tns:fileSizeType"></element>
+ 				<element name="format" type="Q1:formatType"></element>
+ 				<element name="size" type="Q1:fileSizeType"></element>
  				<element name="period" minOccurs="0" maxOccurs="1">
- 					<simpleType>
- 						<!-- R10 : 이용기간은 날짜 수로 정의된다 -->
-						<!-- R11 : 새로나온 신간 전자책은 이용기간이 최대 2주일이고 -->
- 						<restriction base="positiveInteger">
+ 					<!-- R10 : 이용기간은 날짜 수로 정의된다 -->
+					<!-- R11 : 새로나온 신간 전자책은 이용기간이 최대 2주일이고 -->
+					<simpleType>
+						<restriction base="positiveInteger">
 							<minInclusive value="1"></minInclusive>
-							<maxInclusive value="14"></maxInclusive> 							
- 						</restriction>
- 					</simpleType>
+							<maxInclusive value="14"></maxInclusive>
+						</restriction>
+					</simpleType>
  				</element>
- 	</sequence>
+ 			</sequence>
  		</restriction>
  	</complexContent>
  </complexType>
@@ -116,14 +121,6 @@ elementFormDefault="qualified" >
 			<element ref="tns:bookCategory"></element>
 		</sequence>
 	</complexType>
-	<key name="bookID">
-		<selector xpath="./tns:bookList/tns:book"></selector>   <!-- 제약조건이 적용되는 엘리먼트들의 집합을 설정(대상 엘리먼트의 경로) -->
-		<field xpath="@tns:isbn"></field>   <!-- 제약 조건을 만족해야 하는 속성 또는 자식 엘리먼트 지정(key로 사용될 속성이나 엘리먼트의 경로) -->
-	</key>
-	<keyref name="categoryIDref" refer="cid">
-		<selector xpath="./tns:bookList/tns:book/tns:category"></selector>
-		<field xpath=""></field>
-	</keyref>
 </element>
 
 <element name="bookList">  <!-- 도서 목록 -->
@@ -148,11 +145,6 @@ elementFormDefault="qualified" >
 			<element name="category" type="tns:categoryType" minOccurs="0" maxOccurs="unbounded"></element>
 		</sequence>
 	</complexType>
-	<!-- R7: 도서가 속한 분야들은 반드시 별도로 정의된 도서 분류 체계에 있는 특정 분야에 대응되어야 한다. -->
-	<key name="cidKey">
-		<selector xpath="./tns:category"></selector>
-		<field xpath="@cid"></field>
-	</key>
 </element>
 
 </schema>
