@@ -38,6 +38,20 @@ public class MainActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         menu.setHeaderTitle("Change Color");
         getMenuInflater().inflate(R.menu.menu_view, menu);
+
+        int color = myCircle.getColor();
+        switch(color)
+        {
+            case Color.RED:
+                menu.findItem(R.id.radio01).setChecked(true);
+                break;
+            case Color.BLUE:
+                menu.findItem(R.id.radio03).setChecked(true);
+                break;
+            case Color.GREEN:
+                menu.findItem(R.id.radio02).setChecked(true);
+                break;
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -69,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 myCircle.setColor(Color.BLUE);
                 break;
         }
-
+        item.setChecked(true);
         myCircle.invalidate();
         return true;
     }

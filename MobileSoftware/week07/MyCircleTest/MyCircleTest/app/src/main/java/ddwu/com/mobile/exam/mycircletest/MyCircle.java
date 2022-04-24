@@ -44,6 +44,10 @@ public class MyCircle extends View {
         this.color = color;
     }
 
+    public int getColor() {
+        return color;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
