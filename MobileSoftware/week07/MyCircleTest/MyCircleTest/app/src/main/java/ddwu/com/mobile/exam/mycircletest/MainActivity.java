@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
         menu.setHeaderTitle("Change Color");
         getMenuInflater().inflate(R.menu.menu_view, menu);
 
+        //onCreateContextMenu는 메뉴가 생성될 때마다 호출되기 때문에 사전에 체크 표시를 해두는 것이 좋다.
+        //그래서 수업중에 배열에 체크 상태를 담아 놓는 것도 이때문인듯
         int color = myCircle.getColor();
         switch(color)
         {
