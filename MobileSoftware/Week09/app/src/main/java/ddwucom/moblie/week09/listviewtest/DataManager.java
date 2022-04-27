@@ -28,4 +28,10 @@ public class DataManager {
     public void removeData(int idx) {
         subjectList.remove(idx);    //해당 위치에 있는 데이터를 삭제함
     }
+
+    //몇번째 있는 요소인지 알아냄
+    public String getSubject(int idx) {
+        String msg = subjectList.get(idx) + " 과목입니다.";   //해당 인덱스 항목의 값을 받아온다.
+        return msg;
+    }
 }
