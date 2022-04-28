@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.etItem);
 
         listView.setOnItemClickListener(itemClickListener);
+        listView.setOnItemLongClickListener(itemLongClickListener);
     }
 
     public void onClick(View v) {
@@ -53,9 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.btnUpdate:
-                //3. EditText의 항목을 수정함 (if 조건문 잘 세우기)
-                subjectManager.changeData(pos, item);
-                adapter.notifyDataSetChanged();
+                //3. EditText의 항목을 수정함
+                if(!item.equals(subjectManager.getSubject(pos))) {
+                    subjectManager.changeData(pos, item);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(MainActivity.this, "변화 없음", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -70,5 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    AdapterView.OnItemLongClickListener itemLongClickListener =
+            new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    //4. 롱클릭 시 해당 항목 삭제
+                    subjectManager.removeData(position);
+                    adapter.notifyDataSetChanged();
+                    return false;
+                }
+            };
 
 }
