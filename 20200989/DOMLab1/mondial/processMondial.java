@@ -12,232 +12,245 @@ import java.io.*;
 import java.text.NumberFormat;
 
 public class processMondial {
-	static final String inputFile = "mondial/mondial-sample.xml";  	
-									// ³ªÁß¿¡ "mondial/mondial.xml"·Î º¯°æÇØ¼­ Å×½ºÆ® 
+	static final String inputFile = "mondial/mondial.xml";
+	// ë‚˜ì¤‘ì— "mondial/mondial.xml"ë¡œ ë³€ê²½í•´ì„œ í…ŒìŠ¤íŠ¸
 	static final String outputFile = "mondial/result.xml";
-	
-	static final String continent[] = new String[] {"Europe", "Asia", "America", "Africa", "Australia"};
-	static long pop[] = new long[5];  //°¢ ´ë·úº° ÀÎ±¸ÀÇ ÇÕ
-	
+
+	static final String continent[] = new String[] { "Europe", "Asia", "America", "Africa", "Australia" };
+	static long pop[] = new long[5]; // ê° ëŒ€ë¥™ë³„ ì¸êµ¬ì˜ í•©
+
 	public static void main(String[] args) throws Exception {
-		// DOM ÆÄ¼­ »ı¼º
+		// DOM íŒŒì„œ ìƒì„±
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setIgnoringElementContentWhitespace(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 
-		// XML ¹®¼­ ÆÄ½ÌÇÏ±â
+		// XML ë¬¸ì„œ íŒŒì‹±í•˜ê¸°
 		Document document = builder.parse(inputFile);
 
-		Element mondial = document.getDocumentElement();    //root element
-		
-		// ´ë·úº° ÀÎ±¸¸¦ °è»ê ¹× Ãâ·Â (3¹ø)
-		computePopulationsOfContinents(mondial);					
-		
-		// Á¾±³º° ½ÅÀÚ ¼ö¸¦ °è»ê ¹× Ãâ·Â (4¹ø)
+		Element mondial = document.getDocumentElement(); // root element
+
+		// ëŒ€ë¥™ë³„ ì¸êµ¬ë¥¼ ê³„ì‚° ë° ì¶œë ¥ (3ë²ˆ)
+		computePopulationsOfContinents(mondial);
+
+		// ì¢…êµë³„ ì‹ ì ìˆ˜ë¥¼ ê³„ì‚° ë° ì¶œë ¥ (4ë²ˆ)
 		// computeBelieversOfReligions(mondial);	
-				
-		// ±¹°¡º° Á¤º¸ °Ë»ö ¹× Ãâ·Â (1¹ø)
-		processCountries1(mondial);	
-		
-		// ±¹°¡º° Á¤º¸ °Ë»ö ¹× DOM Æ®¸® ¼öÁ¤ (2¹ø)
-		//processCountries2(mondial);	  //¹®¼­ÀÇ ±¸Á¶°¡ º¯°æµÇ°í »õ·Î¿î ¹®¼­°¡ »ı¼ºµÉ ¼ö ÀÖ±â ¶§¹®¿¡ ¼ø¼­¸¦ ¸¶Áö¸·À¸·Î
-		
-		// Ã³¸® °á°ú Ãâ·ÂÀ» À§ÇÑ º¯È¯±â »ı¼º
+
+		// êµ­ê°€ë³„ ì •ë³´ ê²€ìƒ‰ ë° ì¶œë ¥ (1ë²ˆ)
+		processCountries1(mondial);
+
+		// êµ­ê°€ë³„ ì •ë³´ ê²€ìƒ‰ ë° DOM íŠ¸ë¦¬ ìˆ˜ì • (2ë²ˆ)
+		processCountries2(mondial);	  //ë¬¸ì„œì˜ êµ¬ì¡°ê°€ ë³€ê²½ë˜ê³  ìƒˆë¡œìš´ ë¬¸ì„œê°€ ìƒì„±ë  ìˆ˜ ìˆê¸° ë•Œë¬¸ì— ìˆœì„œë¥¼ ë§ˆì§€ë§‰ìœ¼ë¡œ
+
+		// ì²˜ë¦¬ ê²°ê³¼ ì¶œë ¥ì„ ìœ„í•œ ë³€í™˜ê¸° ìƒì„±
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
 
-		// Ãâ·Â Æ÷¸Ë ¼³Á¤: XML ¼±¾ğ°ú ¹®¼­ À¯Çü ¼±¾ğ ³»¿ë ¼³Á¤ÇÏ±â
+		// ì¶œë ¥ í¬ë§· ì„¤ì •: XML ì„ ì–¸ê³¼ ë¬¸ì„œ ìœ í˜• ì„ ì–¸ ë‚´ìš© ì„¤ì •í•˜ê¸°
 		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
 		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "mondial.dtd");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-		
-		// DOMSource °´Ã¼ »ı¼º
+
+		// DOMSource ê°ì²´ ìƒì„±
 		DOMSource source = new DOMSource(document);
 
-		// StreamResult °´Ã¼ »ı¼º
+		// StreamResult ê°ì²´ ìƒì„±
 		StreamResult result = new StreamResult(new File(outputFile));
 
-		// ÆÄÀÏ·Î ÀúÀåÇÏ±â
+		// íŒŒì¼ë¡œ ì €ì¥í•˜ê¸°
 		transformer.transform(source, result);
-		
+
 		System.out.println();
-		System.out.println(outputFile + "·Î ÀúÀåµÇ¾ú½À´Ï´Ù.");
+		System.out.println(outputFile + "ë¡œ ì €ì¥ë˜ì—ˆìŠµë‹ˆë‹¤.");
 	}
 
-	public static void processCountries1(Element mondial) {   //root element ³Ñ°ÜÁÜ
+	public static void processCountries1(Element mondial) { // root element ë„˜ê²¨ì¤Œ
 		for (Node ch = mondial.getFirstChild(); ch != null; ch = ch.getNextSibling()) {
-            if (ch.getNodeName().equals("country")) { // ch: <country>  ÀÚ½Ä ³ëµåÀÇ ÀÌ¸§ÀÌ countryÀÎ°¡?
-                //Element country = (Element) ch; // ¹Ì¸® Element Å¸ÀÔ º¯¼ö·Î ÂüÁ¶
-            	Node country = ch;    //ÇâÈÄ Node type -> Element type º¯°æ ÇÊ¿ä
-            	
-                // 1-1 ±¹°¡ ÀÌ¸§
-                Node name = country.getFirstChild(); // <name>Albania</name>
-                Text txt = (Text) name.getFirstChild();   //<name>ÀÇ ÀÚ½ÄÀº text node
-                String countryName = txt.getData(); // "Albania"
-                // ¶Ç´Â = name.getFirstChild().getNodeValue();   //Ã¹¹øÂ° ÀÚ½Ä ³ëµåÀÇ ³ëµå°ª
-                // ¶Ç´Â = name.getTextContent();   //name elementÀÇ String value (text ³ëµåÀÇ °ªÀ» ¸ğµÎ ±¸ÇØ¼­ ÇÏ³ª·Î ÀÌ¾îÁÜ)
-                System.out.println(countryName);    
-                
-                //1-2 ¸éÀû (79p ÂüÁ¶)
-                String areaValue = ((Element)country).getAttribute("area");
-                //Attr area = country.getAttributeNode("area");
-                System.out.println("¸éÀû : " + areaValue);
-                
-                //1-3 ÀÎ±¸
-                //ÀÎ±¸´Â »ı·«µÉ ¼ö ÀÖÀ½(dtd¿¡ ?) -> ´Ù¸¥ ³ëµå°¡ ³ª¿Ã ¼ö ÀÖ±â ¶§¹®¿¡ È®ÀÎ ÇÊ¿ä
-                Node popNode = name.getNextSibling();
-                if(popNode.getNodeName().equals("population")) {
-                	String population = popNode.getTextContent();
-                	System.out.println("ÀÎ±¸ : " + population);
-                } else {
-                	System.out.println("ÀÎ±¸ Á¤º¸°¡ ¾ø½À´Ï´Ù.");
-                }
-                //popNode.getFirstChild().getNodeValue();
-                //((Text)popNode).getData();
-                
-                //1-4 ¼öµµ
-                //capital ¼Ó¼ºÀÇ °ªÀ» id·Î °®´Â city°¡ ¼öµµÀÓ
-                //Document doc = country.getOwnerDocument();
-                String capitalId = ((Element)country).getAttribute("capital");
-                //¼öµµ¸¦ °®Áö ¾Ê´Â °æ¿ì? -> null°ªÀÌ ³ª¿Ã ¼ö ÀÖÀ½(NullPointerExeption)
-                if(!capitalId.isEmpty()) {
-                	//document °´Ã¼°¡ Á¸ÀçÇÏÁö ¾Ê±â ¶§¹®¿¡ ÇöÀç ³ëµå°¡ ¼ÓÇÑ ¹®¼­¸¦ ¹İÈ¯ÇÏ´Â getOwnerDocument »ç¿ë
-                    Element capital = country.getOwnerDocument().getElementById(capitalId);
-                    name = capital.getFirstChild();
-                    txt = (Text) name.getFirstChild();  
-                    String capitalName = txt.getData(); 
-                    System.out.println("¼öµµÀÇ ÀÌ¸§ : " + capitalName); 
-                }
-                //´Ù¸¥ ¹æ¹ı : is_country_cap="yes" ÀÎ °ÍÀ» Ã£À¸¸é µÊ
-//                NodeList cityList = country.getElementsByTagName("city");   //city¶ó´Â ÀÌ¸§À» °¡Áø ÀÚ¼Õ element¸¸ Ã£¾Æ¶ó
-//                for(int i=00; i<cityList.getLength(); i++) {
-//                	Node city = cityList.item(i);   //city¸¦ ²¨³¿ -> is_country_cap È®ÀÎ
-//                }
-            }
+			if (ch.getNodeName().equals("country")) { // ch: <country> ìì‹ ë…¸ë“œì˜ ì´ë¦„ì´ countryì¸ê°€?
+				//Element country = (Element) ch; // ë¯¸ë¦¬ Element íƒ€ì… ë³€ìˆ˜ë¡œ ì°¸ì¡°
+				Node country = ch; // í–¥í›„ Node type -> Element type ë³€ê²½ í•„ìš”
+
+				// 1-1 êµ­ê°€ ì´ë¦„
+				Node name = country.getFirstChild(); // <name>Albania</name>
+				Text txt = (Text) name.getFirstChild(); // <name>ì˜ ìì‹ì€ text node
+				String countryName = txt.getData(); // "Albania"
+				// ë˜ëŠ” = name.getFirstChild().getNodeValue();   //ì²«ë²ˆì§¸ ìì‹ ë…¸ë“œì˜ ë…¸ë“œê°’
+				// ë˜ëŠ” = name.getTextContent();   //name elementì˜ String value (text ë…¸ë“œì˜ ê°’ì„ ëª¨ë‘ êµ¬í•´ì„œ í•˜ë‚˜ë¡œ ì´ì–´ì¤Œ)
+				System.out.println(countryName);
+
+				//1-2 ë©´ì  (79p ì°¸ì¡°)
+				String areaValue = ((Element) country).getAttribute("area");
+				//Attr area = country.getAttributeNode("area");
+				System.out.println("ë©´ì  : " + areaValue);
+
+				//1-3 ì¸êµ¬
+				//ì¸êµ¬ëŠ” ìƒëµë  ìˆ˜ ìˆìŒ(dtdì— ?) -> ë‹¤ë¥¸ ë…¸ë“œê°€ ë‚˜ì˜¬ ìˆ˜ ìˆê¸° ë•Œë¬¸ì— í™•ì¸ í•„ìš”
+				Node popNode = name.getNextSibling();
+				if (popNode.getNodeName().equals("population")) {
+					String population = popNode.getTextContent();
+					System.out.println("ì¸êµ¬ : " + population);
+				} else {
+					System.out.println("ì¸êµ¬ ì •ë³´ê°€ ì—†ìŠµë‹ˆë‹¤.");
+				}
+				//popNode.getFirstChild().getNodeValue();
+				//((Text)popNode).getData();
+
+				//1-4 ìˆ˜ë„
+				//capital ì†ì„±ì˜ ê°’ì„ idë¡œ ê°–ëŠ” cityê°€ ìˆ˜ë„ì„
+				//Document doc = country.getOwnerDocument();
+				String capitalId = ((Element) country).getAttribute("capital");
+				//ìˆ˜ë„ë¥¼ ê°–ì§€ ì•ŠëŠ” ê²½ìš°? -> nullê°’ì´ ë‚˜ì˜¬ ìˆ˜ ìˆìŒ(NullPointerExeption)
+				if (!capitalId.isEmpty()) {
+					//document ê°ì²´ê°€ ì¡´ì¬í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— í˜„ì¬ ë…¸ë“œê°€ ì†í•œ ë¬¸ì„œë¥¼ ë°˜í™˜í•˜ëŠ” getOwnerDocument ì‚¬ìš©
+					Element capital = country.getOwnerDocument().getElementById(capitalId);
+					name = capital.getFirstChild();
+					txt = (Text) name.getFirstChild();
+					String capitalName = txt.getData();
+					System.out.println("ìˆ˜ë„ì˜ ì´ë¦„ : " + capitalName);
+				}
+				//ë‹¤ë¥¸ ë°©ë²• : is_country_cap="yes" ì¸ ê²ƒì„ ì°¾ìœ¼ë©´ ë¨
+				//NodeList cityList = country.getElementsByTagName("city");   //cityë¼ëŠ” ì´ë¦„ì„ ê°€ì§„ ìì† elementë§Œ ì°¾ì•„ë¼
+				//for(int i=00; i<cityList.getLength(); i++) {
+				//Node city = cityList.item(i);   //cityë¥¼ êº¼ëƒ„ -> is_country_cap í™•ì¸
+				//}
+			}
 		}
-		
-	} 
-	
+
+	}
+
 	public static void processCountries2(Element mondial) {
-		NodeList list = mondial.getElementsByTagName("country");  //country ³ëµå¸¦ ¸ğµÎ ¹ŞÀ½
-		for(int i=0; i<list.getLength(); i++) {
-			Element country = (Element) list.item(i);   //²¨³½ country¸¦ ÀúÀåÇÑ´Ù
-			//¼Ó¼º µîÀ» ±¸ÇÏ±â À§ÇØ Element type Å¸ÀÔÄ³½ºÆÃ
-			
-			Document doc = country.getOwnerDocument();  //country°¡ ¼ÓÇÑ ¹®¼­ ¹İÈ¯
-			Element area = doc.createElement("area");   //area element¸¦ »ı¼ºÇÏ°í ±× °á°ú¸¦ ÀúÀåÇÑ´Ù
-			String areaValue = country.getAttribute("area");  //i¹øÂ° countryÀÇ area ¼Ó¼º °ª
+		NodeList list = mondial.getElementsByTagName("country"); // country ë…¸ë“œë¥¼ ëª¨ë‘ ë°›ìŒ
+		for (int i = 0; i < list.getLength(); i++) {
+			Element country = (Element) list.item(i); // êº¼ë‚¸ countryë¥¼ ì €ì¥í•œë‹¤
+			//ì†ì„± ë“±ì„ êµ¬í•˜ê¸° ìœ„í•´ Element type íƒ€ì…ìºìŠ¤íŒ…
+
+			Document doc = country.getOwnerDocument(); // countryê°€ ì†í•œ ë¬¸ì„œ ë°˜í™˜
+			Element area = doc.createElement("area"); // area elementë¥¼ ìƒì„±í•˜ê³  ê·¸ ê²°ê³¼ë¥¼ ì €ì¥í•œë‹¤
+			String areaValue = country.getAttribute("area"); // ië²ˆì§¸ countryì˜ area ì†ì„± ê°’
 			Text areaText = doc.createTextNode(areaValue);
-			area.appendChild(areaText);  //areaText¸¦ ÀÚ½Ä³ëµå·Î ÀÌ¾îÁÜ<area>areaText</area>
-			Node pop = country.getFirstChild().getNextSibling();  //countryÀÇ Ã¹¹øÂ° ÀÚ½Ä³ëµåÀÇ ´ÙÀ½ ³ëµå(population)
+			area.appendChild(areaText); // areaTextë¥¼ ìì‹ë…¸ë“œë¡œ ì´ì–´ì¤Œ<area>areaText</area>
+			Node pop = country.getFirstChild().getNextSibling(); // countryì˜ ì²«ë²ˆì§¸ ìì‹ë…¸ë“œì˜ ë‹¤ìŒ ë…¸ë“œ(population)
 			country.insertBefore(area, pop);
 			country.removeAttribute("area");
-			//area´Â countryÀÇ µÎ¹øÂ° ÀÚ½ÄÀ¸·Î ³Ö¾îÁØ´Ù -> insertBefore(population)
+			//areaëŠ” countryì˜ ë‘ë²ˆì§¸ ìì‹ìœ¼ë¡œ ë„£ì–´ì¤€ë‹¤ -> insertBefore(population)
 			//country.insertBefore(area, country.getFirstChild().getNextSibling());
+
+			//capitalë¥¼ ì°¾ê³  ë¶€ëª¨ ë…¸ë“œë¡œë¶€í„° ì‚­ì œ(ì„ì‹œ) -> name, area, populationì„ êµ¬í•œ í›„ ë‚˜ë¨¸ì§€ ëª¨ë‘ ì‚­ì œ
+			Element capital = null;
+			String capitalId = country.getAttribute("capital");
+			//ìˆ˜ë„ë¥¼ ê°–ì§€ ì•ŠëŠ” ê²½ìš°? -> nullê°’ì´ ë‚˜ì˜¬ ìˆ˜ ìˆìŒ(NullPointerExeption)
+			if (!capitalId.isEmpty()) {
+				//document ê°ì²´ê°€ ì¡´ì¬í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— í˜„ì¬ ë…¸ë“œê°€ ì†í•œ ë¬¸ì„œë¥¼ ë°˜í™˜í•˜ëŠ” getOwnerDocument ì‚¬ìš©
+				capital = country.getOwnerDocument().getElementById(capitalId);
+				//ìì‹ ë…¸ë“œë¥¼ ì œê±°í•˜ê³  ê·¸ ê°ì²´ë¥¼ ë°˜í™˜í•˜ê¸° ë•Œë¬¸ì— capitalì´ ì €ì¥ë¨
+				//í˜„ì¬ countryê°€ ì†í•œ ë¬¸ì„œë¥¼ ë°˜í™˜í•˜ê³ , capitalIdë¥¼ ê°€ì§„ elementë¥¼ ë°˜í™˜í•¨
+				//country.removeChild(capital);
+				country.removeAttribute("capital");
+			}
+
+			//71page
+			Node ch = pop.getNextSibling(); // populationì˜ ë‹¤ìŒ ë…¸ë“œ
+			while (ch != null) {
+				country.removeChild(ch);
+				ch = pop.getNextSibling();
+			}
+
+			//ì‚­ì œí•œ í›„ capital ë§ˆì§€ë§‰ ë…¸ë“œë¡œ ì‚½ì…
+			//country.appendChild(capital);
+
 			
-		     //capital¸¦ Ã£°í ºÎ¸ğ ³ëµå·ÎºÎÅÍ »èÁ¦(ÀÓ½Ã) -> name, area, populationÀ» ±¸ÇÑ ÈÄ ³ª¸ÓÁö ¸ğµÎ »èÁ¦
-	         Element capital = null;
-	         String capitalId = country.getAttribute("capital");
-	            //¼öµµ¸¦ °®Áö ¾Ê´Â °æ¿ì? -> null°ªÀÌ ³ª¿Ã ¼ö ÀÖÀ½(NullPointerExeption)
-	            if(!capitalId.isEmpty()) {
-	               //document °´Ã¼°¡ Á¸ÀçÇÏÁö ¾Ê±â ¶§¹®¿¡ ÇöÀç ³ëµå°¡ ¼ÓÇÑ ¹®¼­¸¦ ¹İÈ¯ÇÏ´Â getOwnerDocument »ç¿ë
-	                capital = country.getOwnerDocument().getElementById(capitalId);
-	                //ÀÚ½Ä ³ëµå¸¦ Á¦°ÅÇÏ°í ±× °´Ã¼¸¦ ¹İÈ¯ÇÏ±â ¶§¹®¿¡ capitalÀÌ ÀúÀåµÊ
-	                //ÇöÀç country°¡ ¼ÓÇÑ ¹®¼­¸¦ ¹İÈ¯ÇÏ°í, capitalId¸¦ °¡Áø element¸¦ ¹İÈ¯ÇÔ
-	                //country.removeChild(capital);
-	                country.removeAttribute("capital");
-	            }
+			if(!capitalId.isEmpty()) {
+			    Element capitalTmp = doc.createElement("capital");
+	            capitalTmp.setAttribute("country", country.getAttribute("car_code"));
+	            capitalTmp.setAttribute("id", capitalId);
+	            country.removeAttribute("car_code");
+	            country.removeAttribute("memberships");
 	            
-	          //71page
-	            Node ch = pop.getNextSibling();   //populationÀÇ ´ÙÀ½ ³ëµå
-	            while(ch != null) {
-	               country.removeChild(ch);
-	               ch = pop.getNextSibling();
+	            Node ch2 = capital.getFirstChild();
+	            while (ch2 != null) {
+	                capitalTmp.appendChild(ch2);
+	                ch2 = capital.getFirstChild();
 	            }
-	            
-	            //»èÁ¦ÇÑ ÈÄ capital ¸¶Áö¸· ³ëµå·Î »ğÀÔ
-	            //country.appendChild(capital);
-	           
-				Element capitalTmp = doc.createElement("capital");
-				Node ch2 = capital.getFirstChild();
-				while(ch2 != null) {
-					capitalTmp.appendChild(ch2); 
-					ch2 = capital.getFirstChild();
-				}
-				
-				
-				country.appendChild(capitalTmp);
-				
-				//country, id »©°í ¸ğµç ¼Ó¼º »èÁ¦
+
+	            country.appendChild(capitalTmp);
+			}
+			
 		}
-			
-}
-		
-	
+
+	}
+
 	public static void computePopulationsOfContinents(Element mondial) {
 		NodeList list = mondial.getElementsByTagName("country");
 		for (int i = 0; i < pop.length; i++) {
-            pop[i] = 0;
-        }
+			pop[i] = 0;
+		}
 		long popNum = 0L;
 		String continent2 = null;
 		int max = -1;
 		int perTmp;
-		for(int i=0; i<list.getLength(); i++) {
-			Element country = (Element) list.item(i);  //¹Ì¸® element Å¸ÀÔ º¯¼ö·Î ÂüÁ¶
-			
-			//<population>À» Ã£¾Æ ¼ıÀÚ °ª »ı¼º ¹× ÀúÀå (¾øÀ» ¼öµµ ÀÖÀ½)
-			//populationÀº ¼ıÀÚÃ³·³ º¸ÀÌÁö¸¸ ¹®ÀÚÀÌ±â ¶§¹®¿¡ ¼ıÀÚ º¯È¯ÀÌ ÇÊ¿äÇÏ´Ù
-			 Node popNode = country.getFirstChild().getNextSibling();
-			 Text txt = (Text) popNode.getFirstChild();
-             String tmpPop = txt.getData();
-             if(popNode.getNodeName().equals("population")) {
-             	popNum = Long.parseLong(tmpPop);
-             }
-			
-			//±× ´ÙÀ½ ÇüÁ¦ ³ëµåºÎÅÍ ½ÃÀÛÇØ¼­ <encompassed>°¡ Ã³À½ ¹ß°ßµÉ ¶§±îÁö °è¼Ó ÁøÇà(while/for)
-			//Á¶°Ç : encompassed°¡ ¾Æ´Ï°í nullÀÌ ¾Æ´Ï¸é °è¼Ó ÁøÇà
-           //percentageÀÇ ÃÖ´ë°ª°ú percentage°¡ ÃÖ´ëÀÏ ¶§ÀÇ continent °ªÀ» ÀúÀåÇÒ º¯¼ö ¼±¾ğ ¹× ÃÊ±âÈ­
- 			//<encompassed>°¡ ¿©·¯°³¶ó°í °¡Á¤ÇÏ°í °¢ <encompassed> ¸¶´Ù percentageÀÇ °ªÀ» ±¸ÇØ Áö±İ±îÁöÀÇ ÃÖ´ë°ªÀ» ´ë·úÀ¸·Î ¼³Á¤
-             for(Element ch = (Element) country.getFirstChild(); ch != null; ch = (Element) ch.getNextSibling()) {
-            	 if(ch.getNodeName().equals("encompassed")) {
-            		 perTmp = Integer.parseInt(ch.getAttribute("percentage"));
-            		 if(max < perTmp) {
-            			 continent2 = ch.getAttribute("continent");
-            			 max = perTmp;
-            		 }
-            	 }
-             }
-			
+		for (int i = 0; i < list.getLength(); i++) {
+			Element country = (Element) list.item(i); // ë¯¸ë¦¬ element íƒ€ì… ë³€ìˆ˜ë¡œ ì°¸ì¡°
+
+			//<population>ì„ ì°¾ì•„ ìˆ«ì ê°’ ìƒì„± ë° ì €ì¥ (ì—†ì„ ìˆ˜ë„ ìˆìŒ)
+			//populationì€ ìˆ«ìì²˜ëŸ¼ ë³´ì´ì§€ë§Œ ë¬¸ìì´ê¸° ë•Œë¬¸ì— ìˆ«ì ë³€í™˜ì´ í•„ìš”í•˜ë‹¤
+			Node popNode = country.getFirstChild().getNextSibling();
+			Text txt = (Text) popNode.getFirstChild();
+			String tmpPop = txt.getData();
+			//System.out.println(tmpPop);
+			if (popNode.getNodeName().equals("population")) {
+				popNum = Long.parseLong(tmpPop);
+				//System.out.println(popNum);
+			}
+
+			//ê·¸ ë‹¤ìŒ í˜•ì œ ë…¸ë“œë¶€í„° ì‹œì‘í•´ì„œ <encompassed>ê°€ ì²˜ìŒ ë°œê²¬ë  ë•Œê¹Œì§€ ê³„ì† ì§„í–‰(while/for)
+			//ì¡°ê±´ : encompassedê°€ ì•„ë‹ˆê³  nullì´ ì•„ë‹ˆë©´ ê³„ì† ì§„í–‰
+			//percentageì˜ ìµœëŒ€ê°’ê³¼ percentageê°€ ìµœëŒ€ì¼ ë•Œì˜ continent ê°’ì„ ì €ì¥í•  ë³€ìˆ˜ ì„ ì–¸ ë° ì´ˆê¸°í™”
+			//<encompassed>ê°€ ì—¬ëŸ¬ê°œë¼ê³  ê°€ì •í•˜ê³  ê° <encompassed> ë§ˆë‹¤ percentageì˜ ê°’ì„ êµ¬í•´ ì§€ê¸ˆê¹Œì§€ì˜ ìµœëŒ€ê°’ì„ ëŒ€ë¥™ìœ¼ë¡œ ì„¤ì •
+			for (Element ch = (Element) country.getFirstChild(); ch != null; ch = (Element) ch.getNextSibling()) {
+				if (ch.getNodeName().equals("encompassed")) {
+					perTmp = Integer.parseInt(ch.getAttribute("percentage"));
+					continent2 = ch.getAttribute("continent");
+					
+					if (max < perTmp) {
+		                  continent2 = ch.getAttribute("continent");
+		                  //System.out.println(continent2);
+		                  max = perTmp;
+		                  //System.out.println(max);
+		               }
+				}
+			}
+
+			//System.out.println(popNum);
 			//{"Europe", "Asia", "America", "Africa", "Australia"};
-			//if-else ¶Ç´Â switch¹®À» È°¿ëÇØ¼­, ÀÎ±¸°¡ ÃÖ´ëÀÎ ´ë·ú¿¡ ÇØ´çÇÏ´Â ¹è¿­ ¿ø¼Ò¿¡ ÀÎ±¸ °ª ´©Àû
-             if(continent2.equals("Europe")) {
-            	 pop[0] += popNum;
-             } else if(continent2.equals("Asia")) {
-            	 pop[1] += popNum;
-             } else if(continent2.equals("America")) {
-            	 pop[2] += popNum;
-             } else if(continent2.equals("Africa")) {
-            	 pop[3] += popNum;
-             } else if(continent2.equals("Australia")) {
-            	 pop[4] += popNum;
-             }
+			//if-else ë˜ëŠ” switchë¬¸ì„ í™œìš©í•´ì„œ, ì¸êµ¬ê°€ ìµœëŒ€ì¸ ëŒ€ë¥™ì— í•´ë‹¹í•˜ëŠ” ë°°ì—´ ì›ì†Œì— ì¸êµ¬ ê°’ ëˆ„ì 
+			if (continent2.equals("Europe")) {
+				pop[0] += popNum;
+				System.out.println(continent2);
+			} else if (continent2.equals("Asia")) {
+				pop[1] += popNum;
+			} else if (continent2.equals("America")) {
+				pop[2] += popNum;
+			} else if (continent2.equals("Africa")) {
+				pop[3] += popNum;
+			} else if (continent2.equals("Australia")) {
+				pop[4] += popNum;
+			}
 		}
-		// ...
-		
-		// °è»êµÈ °¢ ´ë·úÀÇ ÀÎ±¸¸¦ Ãâ·Â
-		//Ãâ·Â ½Ã ¼¼ÀÚ¸®¸¶´Ù , Âï¾îÁÜ
+
+		// ê³„ì‚°ëœ ê° ëŒ€ë¥™ì˜ ì¸êµ¬ë¥¼ ì¶œë ¥
+		//ì¶œë ¥ ì‹œ ì„¸ìë¦¬ë§ˆë‹¤ , ì°ì–´ì¤Œ
 		printPopulationsOfContinents();
 	}
 
 	public static void printPopulationsOfContinents() {
 		System.out.println("Populations of the Continents");
 		System.out.println("---------------------------");
-		for(int i=0; i<continent.length; i++) {
+		for (int i = 0; i < continent.length; i++) {
 			NumberFormat formatter = NumberFormat.getInstance();
-			System.out.println(continent[i] + "ÀÇ ÀÎ±¸ : " + formatter.format(pop[i]));
+			System.out.println(continent[i] + "ì˜ ì¸êµ¬ : " + formatter.format(pop[i]));
 		}
+		System.out.println();
 	}
-	
+
 }
