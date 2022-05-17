@@ -1,0 +1,14 @@
+/mondial/country
+/mondial/country[@car_code='KR']
+//country[name='South Korea']
+//country[name='South Korea']//city/name
+
+//country[contains(name, 'Korea')=true()]//city/name
+
+//country[contains(name, '독일')]/@area
+//mountain[height > 8000]/name
+
+//country[contains(name, '미국')]/province['워싱턴']/city/name
+
+
+//country[name='Mexico']/border[@country='USA']/@length
