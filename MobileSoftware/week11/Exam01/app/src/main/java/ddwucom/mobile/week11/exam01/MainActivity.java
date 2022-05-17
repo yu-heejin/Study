@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -68,7 +70,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onClick(View v) {
-        Toast.makeText(this, "기능 구현 후 토스트는 삭제", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final ConstraintLayout foodLayout = (ConstraintLayout)View.inflate(this, R.layout.add_food, null);
+        switch (v.getId()) {
+            case R.id.btn1:
+                builder.setTitle("음식 추가")
+                        .setView(foodLayout)
+                        .setPositiveButton("추가", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                EditText foodName = foodLayout.findViewById(R.id.foodName);
+                                EditText nationName = foodLayout.findViewById(R.id.nationName);
+                                String fName = foodName.getText().toString();
+                                String nName = nationName.getText().toString();
+                                foodManager.addData(new Food(fName, nName));
+                                adapter.notifyDataSetChanged();
+                            }
+                        })
+                        .setNegativeButton("취소", null)
+                        .show();
+
+        }
+       // Toast.makeText(this, "기능 구현 후 토스트는 삭제", Toast.LENGTH_SHORT).show();
     }
 
 
