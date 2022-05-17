@@ -1,7 +1,7 @@
 package ddwucom.mobile.week11.exam01;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.prefs.PreferenceChangeEvent;
 
 public class FoodManager {
     private ArrayList<Food> foodList;
@@ -16,30 +16,16 @@ public class FoodManager {
         foodList.add(new Food("오코노미야키", "일본"));
     }
 
-    //getter
     public ArrayList<Food> getFoodList() {
         return foodList;
     }
 
-    //add
-    public void addData(Food newFood) {
-        foodList.add(newFood);
+    public void addData(String food, String nation) {
+        foodList.add(new Food(food, nation));
     }
 
-    //remove
     public void removeData(int index) {
-        foodList.remove(index);
-    }
 
-    //항목 받아오기
-    public Food getFood(int index) {
-        Food food = foodList.get(index);
-        return food;
-    }
-
-    //수정하기
-    public void changeData(int index, Food food) {
-        foodList.set(index, food);
     }
 }
 

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,16 +17,13 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter adapter;
     ArrayList<Food> foodList;
-    FoodManager foodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        foodManager = new FoodManager();
         listView = findViewById(R.id.listView);
-        foodList = foodManager.getFoodList();
 
         // DataManager 적용해 볼 것
 //        foodList = new ArrayList<Food>();
@@ -42,34 +38,23 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, foodList);
 
         listView.setAdapter(adapter);
-        listView.setOnItemLongClickListener(itemLongClickListener);
-        // listView 롱클릭 이벤트 추가
-    }
 
-    AdapterView.OnItemLongClickListener itemLongClickListener =
-            new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, final int pos, long id) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("음식 삭제")
-                            .setMessage(foodManager.getFood(pos).getFood() + "을(를) 삭제하시겠습니까?")
-                            .setIcon(R.mipmap.ic_launcher)
-                            .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialogInterface, int whichButton) {
-                                    foodManager.removeData(pos);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
-                            .setNegativeButton("취소", null)
-                            .show();
-                    return false;
-                }
-            };
+        // listView 롱클릭 이벤트 추가
+        listView.setOnLongClickListener(itemLongClickListener);
+    }
 
 
     public void onClick(View v) {
         Toast.makeText(this, "기능 구현 후 토스트는 삭제", Toast.LENGTH_SHORT).show();
     }
 
+    AdapterView.OnItemLongClickListener itemLongClickListener =
+            new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    //4. 롱클릭 시 해당 항목 삭제
 
+                    return false;
+                }
+            };
 }
