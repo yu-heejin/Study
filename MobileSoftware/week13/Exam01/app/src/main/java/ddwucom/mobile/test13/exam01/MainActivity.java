@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tvDisplay;
     FoodDBHelper myDbHelper;
+    ArrayList<Food> foodArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         tvDisplay = findViewById(R.id.tvDisplay);
 
         myDbHelper = new FoodDBHelper(this);
+        foodArrayList = new ArrayList<Food>();
     }
 
 
@@ -31,14 +33,14 @@ public class MainActivity extends AppCompatActivity {
         switch(v.getId()) {
             case R.id.btnSelect:
                 SQLiteDatabase db = myDbHelper.getReadableDatabase();   //helper가 준비되었기 때문에 DB 얻어옴
-                String[] columns = null;    //= new String[] {FoodDBHelper.COL_ID, FoodDBHelper.COL_FOOD, FoodDBHelper.COL_NATION};
+                String[] columns = new String[] {FoodDBHelper.COL_ID, FoodDBHelper.COL_FOOD, FoodDBHelper.COL_NATION};
                 String selection = null;   //조건 없음
                 String[] selectArgs = null;
 
                 Cursor cursor = db.query(FoodDBHelper.TABLE_NAME, columns, selection, selectArgs, null, null, null, null);
                 //db의 모든 레코드를 반환
 
-                ArrayList<Food> foodArrayList = new ArrayList<Food>();
+
                 while (cursor.moveToNext()) {
                     //long id = cursor.getLong(0);
                     long _id = cursor.getLong(cursor.getColumnIndex(FoodDBHelper.COL_ID));
@@ -48,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
                     //String nation = cursor.getString(2);
 
                     //food 객체 생성
-                    Food food = new Food(_id, foodName, nation);
-                    foodArrayList.add(food);
+                    Food addFood = new Food(_id, foodName, nation);
+                    foodArrayList.add(addFood);
                 }
                 cursor.close();
                 myDbHelper.close();
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 String result = "";
                 for (Food newFood : foodArrayList) {
                     result += newFood.toString() + "\n";
+                    System.out.println(result);
                 }
 
                 tvDisplay.setText(result);
