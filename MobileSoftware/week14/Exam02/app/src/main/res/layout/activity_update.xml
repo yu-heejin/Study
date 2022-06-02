@@ -7,7 +7,7 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="음식 추가"
+        android:text="음식 수정"
         android:textSize="24sp" />
 
     <TextView
@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="음식명을 입력"
         android:inputType="none" />
 
     <TextView
@@ -35,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="음식의 나라명 입력"
         android:inputType="none" />
 
     <LinearLayout
@@ -49,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClick"
-            android:text="추가" />
+            android:text="수정" />
 
         <Button
             android:id="@+id/btn_cancel"

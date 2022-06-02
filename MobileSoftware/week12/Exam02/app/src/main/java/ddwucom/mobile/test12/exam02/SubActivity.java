@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-
 import androidx.appcompat.app.AppCompatActivity;
+
 
 public class SubActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class SubActivity extends AppCompatActivity {
         Food tmp = new Food(fName, cName);
 
         switch (v.getId()) {
-            case R.id.btn_add:
+            case R.id.btn_update:
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("foodClass", tmp);
                 setResult(RESULT_OK, resultIntent);
