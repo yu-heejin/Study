@@ -1,4 +1,4 @@
-package ddwucom.mobile.test14.exam02;
+package ddwucom.mobile.test12.exam02;
 
 import java.util.ArrayList;
 
