@@ -1,10 +1,8 @@
-package ddwucom.mobile.test12.exam02;
+package ddwucom.mobile.test14.exam02;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -142,6 +140,9 @@ public class MainActivity extends AppCompatActivity {
         foodList.clear();
         foodList.addAll(foodDBManager.getAllFood());
         adapter.notifyDataSetChanged();
+        //DB의 내용을 다시 읽어옴
+        //업데이트 시 업데이트 된 내용으로 바뀌어서 화면에 자동으로 갱신됨
+        //돌아오면서 onActivityResult도 실행되면서 토스트 문구가 뜨게 됨
     }
 
     public void onClick(View v) {
