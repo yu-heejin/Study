@@ -13,7 +13,7 @@ public class FoodDBManager {
     Cursor cursor = null;
 
     public FoodDBManager(Context context) {
-        foodDBHelper = new FoodDBHelper(context);    //foodDBHelper 선언
+        foodDBHelper = new FoodDBHelper(context);    //foodDBHelper 생성자로 생성
     }
 
 //    DB의 모든 food를 반환
@@ -37,8 +37,17 @@ public class FoodDBManager {
 
 //    DB 에 새로운 food 추가
     public boolean addNewFood(Food newFood) {
+        SQLiteDatabase db = foodDBHelper.getWritableDatabase();
+        ContentValues value = new ContentValues();
+        value.put(FoodDBHelper.COL_FOOD, newFood.getFood());
+        value.put(FoodDBHelper.COL_NATION, newFood.getNation());
+        //새로운 객체를 하나 만들어서 나라 이름과 음식 이름을 넣어서 전달
 
-        return true;
+//      insert 메소드를 사용할 경우 데이터 삽입이 정상적으로 이루어질 경우 1 이상, 이상이 있을 경우 0 반환 확인 가능
+        long count = db.insert(FoodDBHelper.TABLE_NAME, null, value);
+
+        if(count > 0) return true;    //정상적으로 수행 시 1이상의 값을 반환함
+        else return false;
     }
 
 //    _id 를 기준으로 food 의 이름과 nation 변경

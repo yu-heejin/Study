@@ -34,9 +34,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = findViewById(R.id.listView);
-        foodList = new ArrayList<Food>();
+        foodList = new ArrayList<Food>();   //빈 공간을 하나 가지고 있음
 
         adapter = new ArrayAdapter<Food>(this, android.R.layout.simple_list_item_1, foodList);
+        //foodList를 adapter에 넣어주게 되면 어댑터가 foodList가 가리키는 저장공간을 같이 가리키게 됨
+        //즉 ArrayAdapter 내부의 Ref 변수가 사용됨
+        //그래서 ArrayAdapter가 동작할 때 ArrayList에 담긴 내용을 사용할 수 있는 것임
         listView.setAdapter(adapter);
         foodDBManager = new FoodDBManager(this);
         
@@ -155,12 +158,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {   //화면 갱신
         super.onResume();
-        foodList.clear();
+        foodList.clear();    //기존의 내용을 비워줘서 중복된 내용을 보여주지 않게 함
         foodList.addAll(foodDBManager.getAllFood());
+        //foodList를 새로운 내용으로 바꾸지 않고 기존에 있던 list에서 새로 만들어진 내용을 추가하는 형식으로 만들어줌
+        //즉 새로운 내용을 기존의 foodList가 가리키는 곳에 넣어준다.
+        //어댑터가 가리키는 공간과 리스트가 가리키는 공간이 같으면서 그 안에 새로운 내용을 추가해줌
+        //다만 기존에 있는 것에 계속 추가하기 때문에 화면이 실행될 때마다 계속 추가될 우려가 있음
         adapter.notifyDataSetChanged();
         //DB의 내용을 다시 읽어옴
         //업데이트 시 업데이트 된 내용으로 바뀌어서 화면에 자동으로 갱신됨
         //돌아오면서 onActivityResult도 실행되면서 토스트 문구가 뜨게 됨
+
+//        foodList = foodDBManager.getAllFood();    //이 부분이 레퍼런스 변수이기 때문에 문제가 발생함
+        //foodList는 new ArrayList에 의한 저장공간을 가리키는 변수(레퍼런스 변수이기 때문)
+        //실제 값을 저장하는 것이 아니라 저장 공간을 가리키는 레퍼런스 변수임
+        //getAllFood를 이용해 새로운 arrayList를 만들게 됨(new ArrayList)
+        //이것은 기존의 공간이 아니라 새로운 공간을 다시 만들고 있는 것임
+        //즉 새로운 저장공간이 하나 더 생김
+        //foodList는 새로운 저장공간을 가리키게 됨 -> arrayAdapter와 foodList가 가리키는 저장공간이 서로 달라지게 됨!!!!!
+//        adapter.notifyDataSetChanged();
+        //이 상태로 하면 화면에 데이터 안 뜸 (객체의 레퍼런스 문제)
+        //위의 이유로 어댑터를 notify 시켜도 변하는 것이 없기 때문에 화면상에는 아무런 변화가 없는 것임..
+
     }
 
 
@@ -172,6 +191,25 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+//    private void readAllFoods() {
+//        foodList.clear();
+//
+//        dbHelper = new FoodDBHelper(this);
+//        SQLiteDatabase db = dbHelper.getReadableDatabase();
+//
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + FoodDBHelper.TABLE_NAME, null);
+//
+//        while(cursor.moveToNext()) {
+//            long id = cursor.getInt(cursor.getColumnIndexOrThrow(FoodDBHelper.COL_ID));
+//            String food = cursor.getString(cursor.getColumnIndexOrThrow(FoodDBHelper.COL_FOOD));
+//            String nation = cursor.getString(cursor.getColumnIndexOrThrow(FoodDBHelper.COL_NATION));
+//            foodList.add(new Food(id, food, nation));
+//        }
+//
+//        cursor.close();
+//        dbHelper.close();
+//    }
 
 
     @Override
