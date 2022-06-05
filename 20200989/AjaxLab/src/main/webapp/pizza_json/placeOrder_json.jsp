@@ -1,0 +1,68 @@
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ page import="example.ajax.pizza.*"%>
+<%@ page import="java.util.*"%> 
+<%@ page import="org.json.simple.parser.JSONParser" %>
+<%@ page import="org.json.simple.JSONObject" %>
+<%-- <%! @SuppressWarnings("unchecked") %>  --%>
+<%
+/*
+String phone = request.getParameter("phone");
+String order = request.getParameter("order");
+String address = request.getParameter("address");
+System.out.println("phone: " + phone);
+System.out.println("order: " + order);
+System.out.println("address: " + address);
+*/
+
+//넘어온 값이 하나의 string임
+//request.getReader()
+//JSON simple 방식을 사용
+JSONParser parser = new JSONParser();
+JSONObject jsonObj = null;
+try {
+    jsonObj = (JSONObject)parser.parse(request.getReader());   //json text를 읽기 위한 request.getReader()
+    
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+String phone = (String)jsonObj.get("phone");
+String order = (String)jsonObj.get("order");
+String address = (String)jsonObj.get("address");
+System.out.println("phone: " + phone);
+System.out.println("order: " + order);
+System.out.println("address: " + address);
+
+// application에서 "custMap" 객체를 검색하고 조회/수정 가능
+
+Map<String, Customer> custMap = (Map<String, Customer>)application.getAttribute("custMap"); 
+if (custMap == null || custMap.get(phone) == null) {	 
+	response.setStatus(400);		// bad request
+	response.addHeader("Status", "Unregistered customer");
+	return;
+	//검색이 안 되면 에러 출력
+} 
+else {
+	Customer c = custMap.get(phone);	// 고객 정보 검색
+	System.out.println(c.getName());	// 이름 출력 
+	c.setRecentOrder(order);   //주문한 내용이 고객에게 저장됨
+}
+
+
+if (order.length() <= 0) {
+	response.setStatus(400);		// bad request
+  	response.addHeader("Status", "No order was received");
+  	out.print(" ");
+}
+else if (address.length() <= 0) {
+	response.setStatus(400);		// bad request
+  	response.addHeader("Status", "No address was received");
+	out.print(" ");
+} 
+else { 
+	// make pizza and compute delivery time ...
+	int deliveryTime = (int)(Math.random()*8 + 2);
+	System.out.println("delivery time: " + deliveryTime);
+	out.print(deliveryTime);
+}
+%>

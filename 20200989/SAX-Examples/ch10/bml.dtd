@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="euc-kr"?>
+
+<!-- 엘리먼트 선언 -->
+<!ELEMENT booklist (book*)>
+	<!ELEMENT book (title, author, publisher, price, image?, desc?)>
+		<!ELEMENT title (#PCDATA)>
+		<!ELEMENT author (#PCDATA)>
+		<!ELEMENT publisher (#PCDATA)>
+		<!ELEMENT price (#PCDATA)>
+		<!ELEMENT image EMPTY>
+		<!ELEMENT desc (#PCDATA)>
+
+<!-- 속성 선언 -->
+<!ATTLIST book
+		kind	CDATA #REQUIRED>
+		
+<!ATTLIST image
+        ename ENTITY  #IMPLIED
+        src CDATA #IMPLIED>
+
+<!-- 노테이션 선언 -->
+<!NOTATION  nGIF  PUBLIC "image/gif" "file:///C:/Windows/system32/mspaint.exe">
+<!NOTATION  nJPEG  PUBLIC "image/jpeg" "file:///C:/Program Files/Internet Explorer/iexplore.exe">
+
+<!-- 외부 언파스드 엔티티 선언 -->
+<!ENTITY  eB1Image SYSTEM "b1Image.jpg"  NDATA nJPEG>      
+<!ENTITY  eB2Image SYSTEM "b2Image.gif"  NDATA nGIF>        
+<!ENTITY  eB3Image SYSTEM "b3Image.gif"  NDATA nGIF>    
+
+<!-- 외부 파스드 엔티티 선언 -->      
+<!ENTITY  eB1Desc SYSTEM "b1Desc.txt"> 
+<!ENTITY  eB2Desc SYSTEM "b2Desc.txt"> 
+<!ENTITY  eB3Desc SYSTEM "b3Desc.txt">
