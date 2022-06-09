@@ -14,10 +14,11 @@
 			<item value=""/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
+			<item value="C:\Users\heejin\Downloads\DOMLab1.zip"/>
+			<item value="C:\Users\heejin\Downloads\OpenAPILab.zip"/>
 			<item value="C:\Users\heejin\Downloads\AjaxLab.zip"/>
 			<item value="C:\Users\heejin\Downloads\SAX-Examples.zip"/>
 			<item value="C:\Users\heejin\Downloads\DOMLab2(HTML-DOM&amp;jQuery).zip"/>
-			<item value="C:\Users\heejin\Downloads\DOMLab1.zip"/>
 		</list>
 	</section>
 </section>

@@ -9,248 +9,79 @@ import javax.xml.transform.dom.*;
 import javax.xml.transform.stream.*;
 
 import java.io.*;
-import java.text.NumberFormat;
 
 public class processMondial {
-	static final String inputFile = "mondial/mondial.xml";
-	// 나중에 "mondial/mondial.xml"로 변경해서 테스트
+	static final String inputFile = "mondial/mondial-sample.xml";  	
+									// ���߿� "mondial/mondial.xml"�� �����ؼ� �׽�Ʈ 
 	static final String outputFile = "mondial/result.xml";
-
-	static final String continent[] = new String[] { "Europe", "Asia", "America", "Africa", "Australia" };
-	static long pop[] = new long[5]; // 각 대륙별 인구의 합
-
+	
 	public static void main(String[] args) throws Exception {
-		// DOM 파서 생성
+		// DOM �ļ� ����
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setIgnoringElementContentWhitespace(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 
-		// XML 문서 파싱하기
+		// XML ���� �Ľ��ϱ�
 		Document document = builder.parse(inputFile);
 
-		Element mondial = document.getDocumentElement(); // root element
-
-		// 대륙별 인구를 계산 및 출력 (3번)
-		computePopulationsOfContinents(mondial);
-
-		// 종교별 신자 수를 계산 및 출력 (4번)
+		Element mondial = document.getDocumentElement();
+		
+		// ����� �α��� ��� �� ��� (3��)
+		computePopulationsOfContinents(mondial);					
+		
+		// ������ ���� ���� ��� �� ��� (4��)
 		// computeBelieversOfReligions(mondial);	
-
-		// 국가별 정보 검색 및 출력 (1번)
-		processCountries1(mondial);
-
-		// 국가별 정보 검색 및 DOM 트리 수정 (2번)
-		processCountries2(mondial);	  //문서의 구조가 변경되고 새로운 문서가 생성될 수 있기 때문에 순서를 마지막으로
-
-		// 처리 결과 출력을 위한 변환기 생성
+				
+		// ������ ���� �˻� �� ��� (1��)
+		processCountries1(mondial);	
+		
+		// ������ ���� �˻� �� DOM Ʈ�� ���� (2��)
+		processCountries2(mondial);	
+		
+		// ó�� ��� ����� ���� ��ȯ�� ����
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer transformer = tf.newTransformer();
 
-		// 출력 포맷 설정: XML 선언과 문서 유형 선언 내용 설정하기
+		// ��� ���� ����: XML ����� ���� ���� ���� ���� �����ϱ�
 		transformer.setOutputProperty(OutputKeys.ENCODING, "utf-8");
-		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "mondial.dtd");
+		// transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
+		// "mondial.dtd");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-
-		// DOMSource 객체 생성
+		
+		// DOMSource ��ü ����
 		DOMSource source = new DOMSource(document);
 
-		// StreamResult 객체 생성
+		// StreamResult ��ü ����
 		StreamResult result = new StreamResult(new File(outputFile));
 
-		// 파일로 저장하기
+		// ���Ϸ� �����ϱ�
 		transformer.transform(source, result);
-
+		
 		System.out.println();
-		System.out.println(outputFile + "로 저장되었습니다.");
+		System.out.println(outputFile + "�� ����Ǿ����ϴ�.");
 	}
 
-	public static void processCountries1(Element mondial) { // root element 넘겨줌
-		for (Node ch = mondial.getFirstChild(); ch != null; ch = ch.getNextSibling()) {
-			if (ch.getNodeName().equals("country")) { // ch: <country> 자식 노드의 이름이 country인가?
-				//Element country = (Element) ch; // 미리 Element 타입 변수로 참조
-				Node country = ch; // 향후 Node type -> Element type 변경 필요
-
-				// 1-1 국가 이름
-				Node name = country.getFirstChild(); // <name>Albania</name>
-				Text txt = (Text) name.getFirstChild(); // <name>의 자식은 text node
-				String countryName = txt.getData(); // "Albania"
-				// 또는 = name.getFirstChild().getNodeValue();   //첫번째 자식 노드의 노드값
-				// 또는 = name.getTextContent();   //name element의 String value (text 노드의 값을 모두 구해서 하나로 이어줌)
-				System.out.println(countryName);
-
-				//1-2 면적 (79p 참조)
-				String areaValue = ((Element) country).getAttribute("area");
-				//Attr area = country.getAttributeNode("area");
-				System.out.println("면적 : " + areaValue);
-
-				//1-3 인구
-				//인구는 생략될 수 있음(dtd에 ?) -> 다른 노드가 나올 수 있기 때문에 확인 필요
-				Node popNode = name.getNextSibling();
-				if (popNode.getNodeName().equals("population")) {
-					String population = popNode.getTextContent();
-					System.out.println("인구 : " + population);
-				} else {
-					System.out.println("인구 정보가 없습니다.");
-				}
-				//popNode.getFirstChild().getNodeValue();
-				//((Text)popNode).getData();
-
-				//1-4 수도
-				//capital 속성의 값을 id로 갖는 city가 수도임
-				//Document doc = country.getOwnerDocument();
-				String capitalId = ((Element) country).getAttribute("capital");
-				//수도를 갖지 않는 경우? -> null값이 나올 수 있음(NullPointerExeption)
-				if (!capitalId.isEmpty()) {
-					//document 객체가 존재하지 않기 때문에 현재 노드가 속한 문서를 반환하는 getOwnerDocument 사용
-					Element capital = country.getOwnerDocument().getElementById(capitalId);
-					name = capital.getFirstChild();
-					txt = (Text) name.getFirstChild();
-					String capitalName = txt.getData();
-					System.out.println("수도의 이름 : " + capitalName);
-				}
-				//다른 방법 : is_country_cap="yes" 인 것을 찾으면 됨
-				//NodeList cityList = country.getElementsByTagName("city");   //city라는 이름을 가진 자손 element만 찾아라
-				//for(int i=00; i<cityList.getLength(); i++) {
-				//Node city = cityList.item(i);   //city를 꺼냄 -> is_country_cap 확인
-				//}
-			}
-		}
-
-	}
-
+	public static void processCountries1(Element mondial) {
+				
+		
+	} 
+	
 	public static void processCountries2(Element mondial) {
-		NodeList list = mondial.getElementsByTagName("country"); // country 노드를 모두 받음
-		for (int i = 0; i < list.getLength(); i++) {
-			Element country = (Element) list.item(i); // 꺼낸 country를 저장한다
-			//속성 등을 구하기 위해 Element type 타입캐스팅
+				
+		
+	} 
+	
+	public static void computePopulationsOfContinents(Node mondial) {
 
-			Document doc = country.getOwnerDocument(); // country가 속한 문서 반환
-			Element area = doc.createElement("area"); // area element를 생성하고 그 결과를 저장한다
-			String areaValue = country.getAttribute("area"); // i번째 country의 area 속성 값
-			Text areaText = doc.createTextNode(areaValue);
-			area.appendChild(areaText); // areaText를 자식노드로 이어줌<area>areaText</area>
-			Node pop = country.getFirstChild().getNextSibling(); // country의 첫번째 자식노드의 다음 노드(population)
-			country.insertBefore(area, pop);
-			country.removeAttribute("area");
-			//area는 country의 두번째 자식으로 넣어준다 -> insertBefore(population)
-			//country.insertBefore(area, country.getFirstChild().getNextSibling());
-
-			//capital를 찾고 부모 노드로부터 삭제(임시) -> name, area, population을 구한 후 나머지 모두 삭제
-			Element capital = null;
-			String capitalId = country.getAttribute("capital");
-			//수도를 갖지 않는 경우? -> null값이 나올 수 있음(NullPointerExeption)
-			if (!capitalId.isEmpty()) {
-				//document 객체가 존재하지 않기 때문에 현재 노드가 속한 문서를 반환하는 getOwnerDocument 사용
-				capital = country.getOwnerDocument().getElementById(capitalId);
-				//자식 노드를 제거하고 그 객체를 반환하기 때문에 capital이 저장됨
-				//현재 country가 속한 문서를 반환하고, capitalId를 가진 element를 반환함
-				//country.removeChild(capital);
-				country.removeAttribute("capital");
-			}
-
-			//71page
-			Node ch = pop.getNextSibling(); // population의 다음 노드
-			while (ch != null) {
-				country.removeChild(ch);
-				ch = pop.getNextSibling();
-			}
-
-			//삭제한 후 capital 마지막 노드로 삽입
-			//country.appendChild(capital);
-
-			
-			if(!capitalId.isEmpty()) {
-			    Element capitalTmp = doc.createElement("capital");
-	            capitalTmp.setAttribute("country", country.getAttribute("car_code"));
-	            capitalTmp.setAttribute("id", capitalId);
-	            country.removeAttribute("car_code");
-	            country.removeAttribute("memberships");
-	            
-	            Node ch2 = capital.getFirstChild();
-	            while (ch2 != null) {
-	                capitalTmp.appendChild(ch2);
-	                ch2 = capital.getFirstChild();
-	            }
-
-	            country.appendChild(capitalTmp);
-			}
-			
-		}
-
-	}
-
-	public static void computePopulationsOfContinents(Element mondial) {
-		NodeList list = mondial.getElementsByTagName("country");
-		for (int i = 0; i < pop.length; i++) {
-			pop[i] = 0;
-		}
-		long popNum = 0L;
-		String continent2 = null;
-		int max = -1;
-		int perTmp;
-		for (int i = 0; i < list.getLength(); i++) {
-			Element country = (Element) list.item(i); // 미리 element 타입 변수로 참조
-
-			//<population>을 찾아 숫자 값 생성 및 저장 (없을 수도 있음)
-			//population은 숫자처럼 보이지만 문자이기 때문에 숫자 변환이 필요하다
-			Node popNode = country.getFirstChild().getNextSibling();
-			Text txt = (Text) popNode.getFirstChild();
-			String tmpPop = txt.getData();
-			//System.out.println(tmpPop);
-			if (popNode.getNodeName().equals("population")) {
-				popNum = Long.parseLong(tmpPop);
-				//System.out.println(popNum);
-			}
-
-			//그 다음 형제 노드부터 시작해서 <encompassed>가 처음 발견될 때까지 계속 진행(while/for)
-			//조건 : encompassed가 아니고 null이 아니면 계속 진행
-			//percentage의 최대값과 percentage가 최대일 때의 continent 값을 저장할 변수 선언 및 초기화
-			//<encompassed>가 여러개라고 가정하고 각 <encompassed> 마다 percentage의 값을 구해 지금까지의 최대값을 대륙으로 설정
-			for (Element ch = (Element) country.getFirstChild(); ch != null; ch = (Element) ch.getNextSibling()) {
-				if (ch.getNodeName().equals("encompassed")) {
-					perTmp = Integer.parseInt(ch.getAttribute("percentage"));
-					continent2 = ch.getAttribute("continent");
-					
-					if (max < perTmp) {
-		                  continent2 = ch.getAttribute("continent");
-		                  //System.out.println(continent2);
-		                  max = perTmp;
-		                  //System.out.println(max);
-		               }
-				}
-			}
-
-			//System.out.println(popNum);
-			//{"Europe", "Asia", "America", "Africa", "Australia"};
-			//if-else 또는 switch문을 활용해서, 인구가 최대인 대륙에 해당하는 배열 원소에 인구 값 누적
-			if (continent2.equals("Europe")) {
-				pop[0] += popNum;
-				System.out.println(continent2);
-			} else if (continent2.equals("Asia")) {
-				pop[1] += popNum;
-			} else if (continent2.equals("America")) {
-				pop[2] += popNum;
-			} else if (continent2.equals("Africa")) {
-				pop[3] += popNum;
-			} else if (continent2.equals("Australia")) {
-				pop[4] += popNum;
-			}
-		}
-
-		// 계산된 각 대륙의 인구를 출력
-		//출력 시 세자리마다 , 찍어줌
+		// ...
+		
+		// ���� �� ����� �α��� ���
 		printPopulationsOfContinents();
 	}
 
 	public static void printPopulationsOfContinents() {
-		System.out.println("Populations of the Continents");
-		System.out.println("---------------------------");
-		for (int i = 0; i < continent.length; i++) {
-			NumberFormat formatter = NumberFormat.getInstance();
-			System.out.println(continent[i] + "의 인구 : " + formatter.format(pop[i]));
-		}
-		System.out.println();
+	
 	}
-
+	
 }
