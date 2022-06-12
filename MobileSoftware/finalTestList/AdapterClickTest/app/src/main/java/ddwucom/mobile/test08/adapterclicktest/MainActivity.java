@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
             subjectManager.removeData(i);
             position = i;
             adapter.notifyDataSetChanged();
-            return false;
+            return true;
+            //return false;    ->  return false 를 하면 onItemClick이 실행되면서 editText에 글자가 나타남!!!!!!
         }
     };
 
