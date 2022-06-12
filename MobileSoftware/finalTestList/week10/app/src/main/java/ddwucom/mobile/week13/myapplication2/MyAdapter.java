@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
 
 public class MyAdapter extends BaseAdapter {
@@ -16,6 +17,7 @@ public class MyAdapter extends BaseAdapter {
     private int layout;
     private ArrayList<MyData> myDataArrayList;
     private LayoutInflater layoutInflater;   //inflater 객체
+    ViewHolder viewHolder;
 
     public MyAdapter(Context context, int layout, ArrayList<MyData> myDataArrayList) {
         this.context = context;
@@ -53,26 +55,60 @@ public class MyAdapter extends BaseAdapter {
             //전달 받은 view가 미생성일 경우 inflater를 사용하여 layout에 해당하는 view 객체 생성
             //이 함수가 매번 실행되는 것을 생각해보자. 그럼 맨 처음에 함수가 호출될땐 view에 아무런 객체가 들어오지 않을 것이다
             //따라서 초기에 뷰를 저장하기 위해 layout, 즉 커스텀 뷰를 inflate하는 것이다
+            viewHolder = new ViewHolder();
+            viewHolder.tvNo = (TextView) view.findViewById(R.id.id);
+            viewHolder.tvName = (TextView) view.findViewById(R.id.name);
+            viewHolder.tvPhone = (TextView) view.findViewById(R.id.phone);
+            viewHolder.button = (Button) view.findViewById(R.id.btn);
+            view.setTag(viewHolder);   //해당 뷰에 고유 이름표가 뷰에 붙는다
+            //view에도 바코드처럼 특별한 id를 부여할 수 있음, 즉 뷰를 식별하기 위함
+            //findByView를 반복해서 호출하는 것은 성능 감소의 원인이 될 수 있다.
+            //view가 초기에 들어오면 내부 클래스에 findViewById를 정적 클래스에 삽입한 후, 호출하지 않고 반복해서 사용할 수 있도록 구성
+        } else {
+            viewHolder = (ViewHolder) view.getTag();
+            //재활용 하고있는 view에 대해 설정한 태그값을 받아옴
+            //뷰를 재활용하기 위해 태그를 설정하는데, 이때 태그값을 viewHolder 객체로 설정한다면,!!!!!!!!!!!!!!!
+            //getTag로 값을 받아올 때 view의 태그값인 viewHolder가 Object 형태로 반환됨 -> 형변환하여 viewHolder를 받아온다!!!!!!!!!!!!!!
         }
 
-        TextView tvNo = view.findViewById(R.id.id);
-        TextView tvName = view.findViewById(R.id.name);
-        TextView tvPhone = view.findViewById(R.id.phone);
-        Button button = view.findViewById(R.id.btn);
-        button.setFocusable(false);
+//        TextView tvNo = view.findViewById(R.id.id);
+//        TextView tvName = view.findViewById(R.id.name);
+//        TextView tvPhone = view.findViewById(R.id.phone);
+//        Button button = view.findViewById(R.id.btn);
+//        button.setFocusable(false);
         //커스텀 뷰에 버튼이 있을 경우 항목 아이템의 클릭/롱클릭이 동작하지 않을 수 있음
         //실제로 해당 코드를 주석처리 했더니 항목을 클릭했을 땐 longClick이 먹히지 않음을 알 수 있다!
         //버튼이 포커스를 모두 가져가기 때문에 버튼 외 다른 요소의 클릭이 먹히지 않을 수 있기 때문
 
-        tvNo.setText(String.valueOf(myDataArrayList.get(position).get_id()));
-        tvName.setText(myDataArrayList.get(position).getName());
-        tvPhone.setText(myDataArrayList.get(position).getPhone());
-        button.setOnClickListener(new Button.OnClickListener() {
-            @Override
+//        tvNo.setText(String.valueOf(myDataArrayList.get(position).get_id()));
+//        tvName.setText(myDataArrayList.get(position).getName());
+//        tvPhone.setText(myDataArrayList.get(position).getPhone());
+//        button.setOnClickListener(new Button.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(context, myDataArrayList.get(position).getPhone() + " 선택", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        //viewHolder.tvNo.setText(String.valueOf(myDataArrayList.get(position).get_id()));
+        viewHolder.tvNo.setText(Integer.valueOf((int) myDataArrayList.get(position).get_id()).toString());
+        viewHolder.tvName.setText(myDataArrayList.get(position).getName());
+        viewHolder.tvPhone.setText(myDataArrayList.get(position).getPhone());
+        viewHolder.button.setFocusable(false);
+
+        viewHolder.button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Toast.makeText(context, myDataArrayList.get(position).getPhone() + " 선택", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,myDataArrayList.get(position).getPhone() + " 선택", Toast.LENGTH_SHORT).show();
             }
         });
         return view;
+    }
+
+    static class ViewHolder {   //어댑터의 내부 클래스로 구현
+        //뷰를 보관하는 객체
+        TextView tvNo;
+        TextView tvName;
+        TextView tvPhone;
+        Button button;
     }
 }
