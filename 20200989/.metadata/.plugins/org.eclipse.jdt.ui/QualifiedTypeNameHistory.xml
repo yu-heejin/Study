@@ -13,4 +13,11 @@
     <fullyQualifiedTypeName name="org.w3c.dom.traversal.DocumentTraversal"/>
     <fullyQualifiedTypeName name="org.w3c.dom.traversal.NodeFilter"/>
     <fullyQualifiedTypeName name="org.w3c.dom.traversal.NodeIterator"/>
+    <fullyQualifiedTypeName name="org.xml.sax.helpers.XMLReaderFactory"/>
+    <fullyQualifiedTypeName name="org.xml.sax.helpers.DefaultHandler"/>
+    <fullyQualifiedTypeName name="org.xml.sax.XMLReader"/>
+    <fullyQualifiedTypeName name="org.xml.sax.SAXException"/>
+    <fullyQualifiedTypeName name="javax.xml.parsers.SAXParserFactory"/>
+    <fullyQualifiedTypeName name="javax.xml.parsers.SAXParser"/>
+    <fullyQualifiedTypeName name="org.xml.sax.ContentHandler"/>
 </qualifiedTypeNameHistroy>
