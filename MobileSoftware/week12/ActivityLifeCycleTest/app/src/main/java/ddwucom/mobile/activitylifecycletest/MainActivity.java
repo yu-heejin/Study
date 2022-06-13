@@ -17,6 +17,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+//		if(savedInstanceState != null) {
+//			System.out.println("hello");
+//		} else {
+//			System.out.println("bye");
+//		}
 		Log.i(TAG, "onCreate");
 	}
 
@@ -60,14 +66,20 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
 		outState.putString("save_data", "test!");
 		Log.i(TAG, "onSaveInstanceState");
-		super.onSaveInstanceState(outState);
+		//super.onSaveInstanceState(outState);
 	}
 	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		if(savedInstanceState != null) {
+			System.out.println("hello");
+		} else {
+			System.out.println("bye");
+		}
 		Log.i(TAG, "onRestoreInstanceState: " + savedInstanceState.getString("save_data"));
 		super.onRestoreInstanceState(savedInstanceState);
 	}
