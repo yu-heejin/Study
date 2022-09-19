@@ -14,8 +14,8 @@ import io.reactivex.Single;
 
 @Dao
 public interface FoodDAO {
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    long insertFood(Food food);
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)  //테이블에 동일한 ID의 행이 있을 경우 대체
+//    long insertFood(Food food);   //추가한 행의 rowId 반환
 //
 //    @Update
 //    void updateFood(Food food);

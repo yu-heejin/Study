@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         etFood = findViewById(R.id.etFood);
         etNation = findViewById(R.id.etNation);
         listView = findViewById(R.id.listView);
-//        adapter = new ArrayAdapter<Food>(this, android.R.layout.simple_list_item_1, new ArrayList<Food>());
+        adapter = new ArrayAdapter<Food>(this, android.R.layout.simple_list_item_1, new ArrayList<Food>());
+        listView.setAdapter(adapter);
 
         db = Room.databaseBuilder(this, FoodDB.class, "food_db.db").build();   //DB 생성하기
         dao = db.foodDAO();
