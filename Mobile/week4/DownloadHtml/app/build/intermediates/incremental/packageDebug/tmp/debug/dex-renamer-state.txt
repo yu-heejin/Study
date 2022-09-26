@@ -1,0 +1,4 @@
+#Mon Sep 26 12:03:47 KST 2022
+base.0=C\:\\Users\\20200\\Desktop\\Gitpository\\Study_Assignment\\Mobile\\week4\\DownloadHtml\\app\\build\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
