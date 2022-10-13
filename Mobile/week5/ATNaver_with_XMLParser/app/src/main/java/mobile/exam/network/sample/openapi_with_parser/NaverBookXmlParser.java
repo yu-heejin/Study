@@ -62,7 +62,7 @@ public class NaverBookXmlParser {
                             tagType = TagType.AUTHOR;
                         } else if(dbo != null && tag.equals(LINK_TAG)) {
                             tagType = TagType.LINK;
-                        } else if(tagType.equals(IMAGE_TAG)) {
+                        } else if(tag.equals(IMAGE_TAG)) {
                             tagType = TagType.IMAGE;
                         }
                         break;
