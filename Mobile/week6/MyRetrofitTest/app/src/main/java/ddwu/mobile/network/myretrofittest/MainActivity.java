@@ -3,12 +3,16 @@ package ddwu.mobile.network.myretrofittest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.List;
+
 import ddwu.mobile.network.myretrofittest.model.json.BoxOfficeRoot;
+import ddwu.mobile.network.myretrofittest.model.json.DailyBoxOffice;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,16 +63,21 @@ public class MainActivity extends AppCompatActivity {
             //응답이 정상적으로 왔을 때 할 작업들
             if(response.isSuccessful()) {
                 //결과 처리
-                
+                BoxOfficeRoot boxOfficeRoot = response.body();   //BoxOfficeRoot 튀어나옴
+                List<DailyBoxOffice> list = boxOfficeRoot.getBoxOfficeResult().getDailyBoxOfficeList();
+
+                for(DailyBoxOffice dbo : list) {
+                    Log.d(TAG, dbo.toString());
+                }
             }
         }
 
         @Override
         public void onFailure(Call<BoxOfficeRoot> call, Throwable t) {
             //응답이 잘못됐을 때 처리하는 작업
-
+            Log.e(TAG, t.toString());
         }
-    }
+    };
 
 
 
