@@ -1,4 +1,4 @@
-package mobile.example.network.test.myxmlparser;
+package mobile.exam.network.sample.openapi_with_parser;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,114 +21,103 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class MainActivity extends AppCompatActivity {
 
-    final static String TAG = "MainActivity";
+    public static final String TAG = "MainActivity";
 
-    EditText etTargetDate;
+    EditText etTarget;
     ListView lvList;
     String apiAddress;
 
-    ArrayAdapter<DailyBoxOffice> adapter;
-    List<DailyBoxOffice> resultList;
+    String query;
+
+    ArrayAdapter<NaverBookDto> adapter;
+    ArrayList<NaverBookDto> resultList;
+    NaverBookXmlParser parser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        etTargetDate = (EditText)findViewById(R.id.etTargetDate);
-        lvList = (ListView)findViewById(R.id.lvList);
+        etTarget = findViewById(R.id.etTarget);
+        lvList = findViewById(R.id.lvList);
 
-        resultList = new ArrayList<DailyBoxOffice>();
-        adapter = new ArrayAdapter<DailyBoxOffice>(this, android.R.layout.simple_list_item_1, resultList);
-
+        resultList = new ArrayList();
+        adapter = new ArrayAdapter<NaverBookDto>(this, android.R.layout.simple_list_item_1, resultList);
         lvList.setAdapter(adapter);
 
-//        apiAddress = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.xml?key=e67d9c6f2a38b88f466a71f2df8acdc6&targetDt=";
-//        res/values/strings.xml 의 server_url 값을 읽어옴
-        apiAddress = getResources().getString(R.string.server_url);   //string.xml에 정의됨
+        apiAddress = getResources().getString(R.string.api_url);
+        parser = new NaverBookXmlParser();
     }
-
 
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btnDownHtml:
-                if (!isOnline()) {  //isOnline : 네트워크를 사용할 수 있는지 확인
-                    Toast.makeText(MainActivity.this, "네트워크를 사용가능하게 설정해주세요.", Toast.LENGTH_SHORT).show();
+            case R.id.btnSearch:
+                if (!isOnline()) {
+                    Toast.makeText(MainActivity.this, "네트워크를 사용 설정해주세요.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                String targetDate = etTargetDate.getText().toString();
-                if (targetDate.equals("")) targetDate = etTargetDate.getHint().toString();  // 입력값이 없을 경우 hint 속성의 값을 기본 값으로 설정
-                new NetworkAsyncTask().execute(apiAddress + targetDate);    // server_url 에 입력한 날짜를 결합한 후 AsyncTask 실행
-                //execute하는 순간 doInBackground 실행
-                //doInBackground는 별도의 쓰레드로 만들어져서 내부에서 실행됨
+                query = etTarget.getText().toString();
+                new NaverAsyncTask().execute(apiAddress, query);
                 break;
         }
     }
 
 
-    class NetworkAsyncTask extends AsyncTask<String, Void, String> {   // 쓰레드 역할을 하는 클래스
-
-        final static String NETWORK_ERR_MSG = "Server Error!";
-        public final static String TAG = "NetworkAsyncTask";
+    class NaverAsyncTask extends AsyncTask<String, Integer, String> {
         ProgressDialog progressDlg;
 
         @Override
-        protected void onPreExecute() {   //실행 전 작업, 네트워크 대기상태 alert 창을 띄움
+        protected void onPreExecute() {
             super.onPreExecute();
-            progressDlg = ProgressDialog.show(MainActivity.this, "Wait", "Downloading...");     // 진행상황 다이얼로그 출력
+            progressDlg = ProgressDialog.show(MainActivity.this, "Wait", "Downloading...");
         }
 
         @Override
-        protected String doInBackground(String... strings) {   //url 주소가 매개변수로 받아짐
+        protected String doInBackground(String... strings) {
             String address = strings[0];
-            String result = downloadContents(address);    //네트워크 부분 모듈화
-            if (result == null) {  //네트워크 응답이 없으면
-                cancel(true);
-                return NETWORK_ERR_MSG;
+            String query = strings[1];
+
+            String apiURL = null;
+            try {
+                apiURL = address + URLEncoder.encode(query, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
+
+            String result = downloadNaverContents(apiURL);
             return result;
         }
 
-        @Override
-        protected void onPostExecute(String result) {   //doInBackground가 끝나고 자동으로 호출, xml 전체 데이터 들어옴
-            progressDlg.dismiss();  // 진행상황 다이얼로그 종료
-            adapter.clear();        // 어댑터에 남아있는 이전 내용이 있다면 클리어
-
-            Log.d(TAG, "result: " + result);
-
-//          parser 생성 및 OpenAPI 수신 결과를 사용하여 parsing 수행
-            KobisXmlParser parser = new KobisXmlParser();
-            resultList = parser.parse(result);
-
-            if (resultList == null) {       // 올바른 결과를 수신하지 못하였을 경우 안내
-                Toast.makeText(MainActivity.this, "날짜를 올바르게 입력하세요.", Toast.LENGTH_SHORT).show();
-            } else if (!resultList.isEmpty()) {
-                adapter.addAll(resultList);     // 리스트뷰에 연결되어 있는 어댑터에 parsing 결과 ArrayList 를 추가
-            }
-        }
-
 
         @Override
-        protected void onCancelled(String msg) {   //사용자가 네트워크 작업을 취소할 경우
-            super.onCancelled();
+        protected void onPostExecute(String result) {
+            Log.i(TAG, result);
             progressDlg.dismiss();
-            Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+            ArrayList<NaverBookDto> parserdList = parser.parse(result);     // 오픈API 결과의 파싱 수행
+
+            if (parserdList == null || parserdList.size() == 0) {
+                Toast.makeText(MainActivity.this, "No data!", Toast.LENGTH_SHORT).show();
+            } else {
+                resultList.clear();
+                resultList.addAll(parserdList);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
 
-   /* 이하 네트워크 접속을 위한 메소드 */
-
-
+    
     /* 네트워크 환경 조사 */
     private boolean isOnline() {
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -137,18 +126,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /* 주소(apiAddress)에 접속하여 문자열 데이터를 수신한 후 반환 */
-    protected String downloadContents(String address) {
+    /* 주소(address)에 접속하여 문자열 데이터를 수신한 후 반환 */
+    protected String downloadNaverContents(String address) {
         HttpURLConnection conn = null;
         InputStream stream = null;
         String result = null;
 
+        // 클라이언트 아이디 및 시크릿 그리고 요청 URL 선언
+        String clientId = getResources().getString(R.string.client_id);
+        String clientSecret = getResources().getString(R.string.client_secret);
+
         try {
             URL url = new URL(address);
             conn = (HttpURLConnection)url.openConnection();
+            conn.setRequestMethod("GET");
+           /* 네이버 사용 시 설정 필요 */
+            conn.setRequestProperty("X-Naver-Client-Id", clientId);
+            conn.setRequestProperty("X-Naver-Client-Secret", clientSecret);
+            // header에 식별정보 넣어줌 (추가)
+
             stream = getNetworkConnection(conn);
             result = readStreamToString(stream);
-            Log.d(TAG, "Result: " + result);
             if (stream != null) stream.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,10 +154,12 @@ public class MainActivity extends AppCompatActivity {
             if (conn != null) conn.disconnect();
         }
 
+        Log.d(TAG, "Result: " + result);
         return result;
     }
 
-    /* 주소(apiAddress)에 접속하여 비트맵 데이터를 수신한 후 반환 */
+
+    /* 주소(address)에 접속하여 비트맵 데이터를 수신한 후 반환 */
     protected Bitmap downloadImage(String address) {
         HttpURLConnection conn = null;
         InputStream stream = null;
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
     protected Bitmap readStreamToBitmap(InputStream stream) {
         return BitmapFactory.decodeStream(stream);
     }
+
 
 
 }

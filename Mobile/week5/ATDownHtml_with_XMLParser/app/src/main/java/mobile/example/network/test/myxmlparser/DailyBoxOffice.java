@@ -3,6 +3,7 @@ package mobile.example.network.test.myxmlparser;
 import java.io.Serializable;
 
 public class DailyBoxOffice implements Serializable {
+    //intent에 넣어서 객체 상태에서 주고받으려면 serializable
     private long _id;
     private String rank;
     private String movieNm;
