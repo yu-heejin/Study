@@ -1,8 +1,5 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Main {
     final static int K = 1000;
@@ -15,15 +12,16 @@ public class Main {
 
     public static void main(String[] args) {
         DualPivotQuickSort dualPivotQuickSort = new DualPivotQuickSort();
-        List<Integer> numbers = new ArrayList<>();
+        int[] numbers;
 
         for (int i = 0; i < STANDARD_INDEXES.length; i++) {
             for (int j = 0; j < ARRAY_SIZES.length; j++) {
                 int arrSize = ARRAY_SIZES[j] * K;
+                numbers = new int[arrSize];
 
                 // 10k, 100k, 200k, 400k, ...
                 for (int k = 0; k < arrSize; k++) {
-                    numbers.add((int)(Math.random() * RANDOM_STANDARD) + 1);   // 1 - 1000 사이의 난수 발생
+                    numbers[k] = (int)(Math.random() * RANDOM_STANDARD) + 1;   // 1 - 1000 사이의 난수 발생
                 }
 
                 long start = System.currentTimeMillis();
@@ -32,7 +30,7 @@ public class Main {
 
                 System.out.println("n value : " + STANDARD_INDEXES[i] + ", array size : " + arrSize + " - " + ((end - start) / DIVIDE_NUMBER));
 
-                numbers.clear();
+                //numbers.clear();
             }
         }
 

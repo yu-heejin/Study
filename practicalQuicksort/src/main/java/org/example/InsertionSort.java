@@ -1,19 +1,18 @@
 package org.example;
 
-import java.util.List;
 
 public class InsertionSort {
-    public void insertionSort(List<Integer> numbers) {
-        for (int i = 1; i < numbers.size(); i++) {
-            int target = numbers.get(i);
+    public void insertionSort(int[] numbers) {
+        for (int i = 1; i < numbers.length; i++) {
+            int target = numbers[i];
             int j = i - 1;
 
-            while (j >= 0 && target < numbers.get(j)) {
-                numbers.set(j + 1, numbers.get(j));
+            while (j >= 0 && target < numbers[j]) {
+                numbers[j + 1] = numbers[j];
                 j--;
             }
 
-            numbers.set(j + 1, target);
+            numbers[j + 1] = target;
         }
     }
 }
