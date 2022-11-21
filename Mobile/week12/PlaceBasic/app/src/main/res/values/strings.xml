@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Place Basic</string>
+    <string name="button_test">Test</string>
+    <string name="api_key">YOUR_API_KEY</string>
+</resources>
