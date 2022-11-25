@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleMap mGoogleMap;       // 지도 객체
     private Marker mCenterMarer;         // 중앙 표시 Marker
     private Polyline mPolyline;
+    private Marker poiMarkers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,37 +321,50 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
 //            작업 수행 후 가상 parsing 수행
             List<POI> poiList = parser.parse(result);
             apiProgressDialog.dismiss();
 
 //            poiList 의 POI 로 마커 추가 기능 수행
-            for (int i = 0; i < poiList.size(); i++) {
-                MarkerOptions options = new MarkerOptions();
-                options.position(getReverseGeocoder(poiList.get(i).getAddress()));
-                options.title(poiList.get(i).getTitle());
-                options.snippet(poiList.get(i).getAddress());
-                options.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
 
-                mCenterMarer = mGoogleMap.addMarker(options);
-                mCenterMarer.showInfoWindow();
+            for (POI poi : poiList) {
+                ReverseGeoTask reverseGeoTask = new ReverseGeoTask();
+                reverseGeoTask.execute(poi);
             }
-
         }
     }
 
-    protected LatLng getReverseGeocoder(String address) {
-        Geocoder geocoder = new Geocoder(MainActivity.this);
-        List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocationName(address,1);
-            LatLng latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-            return latLng;
-        } catch (IOException e) {
-            e.printStackTrace();
+    class ReverseGeoTask extends AsyncTask<POI, Void, List<Address>> {
+        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+        MarkerOptions options = new MarkerOptions();
+
+        protected List<Address> doInBackground(POI... pois) {
+            List<Address> addresses = null;
+            try {
+                addresses = geocoder.getFromLocationName(pois[0].getAddress(), 1);
+                options.title(pois[0].getTitle());
+                options.snippet(pois[0].getPhone());
+                return addresses;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return addresses;
         }
-        return null;
+
+        @Override
+        protected void onPostExecute(List<Address> addresses) {
+            if (addresses != null) {
+                Address address = addresses.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                // Toast.makeText(MainActivity.this, address.getAddressLine(0), Toast.LENGTH_SHORT).show();
+                options.position(latLng);
+                options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+                poiMarkers = mGoogleMap.addMarker(options);
+                poiMarkers.showInfoWindow();
+            }
+        }
     }
 
 }
