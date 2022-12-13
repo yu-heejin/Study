@@ -25,6 +25,15 @@ public class MainActivity extends AppCompatActivity {
     public void onClick (View v) {
         switch (v.getId()) {
             case R.id.btnNoti:
+                // 알림창에 작업 버튼 추가
+                int notificationId = 100;
+//                Intent snoozeIntent = new Intent(this, NotiActivity.class);
+//                snoozeIntent.setAction(getString(R.string.ACTION_SNOOZE));
+//                snoozeIntent.putExtra(notificationId, 0);
+//                PendingIntent snoozePendingIntent =
+//                        PendingIntent.getBroadcast(this, 0, snoozeIntent, 0);
+
+
                 // 알람 실행 시 알림을 탭했을 때 실행할 동작 지정
                 Intent intent = new Intent(this, NotiActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -36,13 +45,11 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle("알람입니당")
                         .setContentText("배가 너무 아파서 시험공부가 하기 싫어요")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)     // 알람 표시의 우선순위
-                        .setContentIntent(pendingIntent)
+                        .addAction(R.drawable.ic_launcher_background, "snooze", pendingIntent)    // action 버튼 추가
                         .setAutoCancel(true);
 
                 // NotificationManager를 사용하여 생성한 알림을 실행
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-
-                int notificationId = 100;
                 notificationManager.notify(notificationId, builder.build());
 
                 break;
