@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
@@ -42,6 +44,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 구글 기본 지도앱에 전달된다.
+        // String location = String.format("geo:%f,%f?z=%d", 37.6063200, 127.0418080, 20);
+        // Uri uri = Uri.parse(location);
+        // Intent it = new Intent(Intent.ACTION_VIEW, uri);
+        // startActivity(it);
+
+        // 안드로이드 기본 지도앱에 경로 요청하기
+//        String route = String.format("http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f",
+//                37.6063200, 127.0418080, 37.6019250, 127.0415300);
+//        Uri uri = Uri.parse(route);
+//        Intent it = new Intent(Intent.ACTION_VIEW, uri);
+//        startActivity(it);
         setContentView(R.layout.activity_main);
 
         tvText = findViewById(R.id.tvText);
